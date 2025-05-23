@@ -1,0 +1,19 @@
+:root {
+  /* framing */
+  --page-border-width: 16px;
+
+  /* gutters & spacing */
+  --page-gutter: 24px;
+
+  /* if you have a fixed header/footer */
+  --header-height: 64px;
+  --footer-height: 64px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
