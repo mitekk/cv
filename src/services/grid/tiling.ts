@@ -8,6 +8,7 @@ import type {
   ShapeRotation,
   Point,
   TemplateSize,
+  Shape,
 } from "../../types";
 
 const createEmptyGrid = (rows: number, cols: number): Grid =>
@@ -64,27 +65,35 @@ const applyTemplate = (
   rowPosition: number,
   colPosition: number,
   placement: TemplatePlacement[]
-) => {
-  placement.forEach(({ shape, rotation, anchor }) => {
+) =>
+  placement.map(({ shape, rotation, anchor }) => {
     const shapeId = nextShapeId++;
+
     const baseOffsets = BASE_SHAPES[shape as ShapeKey];
     const rotatedOffsets = baseOffsets.map((pt) => rotatePoint(pt, rotation));
     const minX = Math.min(...rotatedOffsets.map((pt) => pt.x));
     const minY = Math.min(...rotatedOffsets.map((pt) => pt.y));
 
+    const shapePoints: Point[] = [];
     rotatedOffsets.forEach((pt) => {
       const gx = rowPosition + anchor.x + (pt.x - minX);
       const gy = colPosition + anchor.y + (pt.y - minY);
 
       if (gx >= 0 && gx < grid.length && gy >= 0 && gy < grid[0].length) {
+        shapePoints.push({ x: gx, y: gy });
         grid[gx][gy] = {
           id: shapeId,
-          shape: shape as ShapeKey,
+          shape: shape,
         };
       }
     });
+
+    return {
+      id: shapeId,
+      key: shape,
+      points: shapePoints,
+    };
   });
-};
 
 const lastIndexBySize: Partial<Record<TemplateSize, number>> = {};
 
@@ -100,19 +109,19 @@ const chooseTemplate = (size: TemplateSize): TemplatePlacement[] => {
   return arr[idx];
 };
 
-export function generateTiledGrid(rows: number, cols: number): Grid {
+export function generateTiledGrid(rows: number, cols: number): Shape[] {
   const grid = createEmptyGrid(rows, cols);
   const sizes: Array<TemplateSize> = [32, 16, 8, 4];
+  const gridShapes: Shape[] = [];
 
   let next: Point | null;
   while ((next = findNextEmpty(grid))) {
     const { x: rowPosition, y: colPosition } = next;
-
     let placed = false;
     for (const size of sizes) {
       if (canPlaceChunk(grid, rowPosition, colPosition, size)) {
         const tpl = chooseTemplate(size);
-        applyTemplate(grid, rowPosition, colPosition, tpl);
+        gridShapes.push(...applyTemplate(grid, rowPosition, colPosition, tpl));
         placed = true;
         break;
       }
@@ -124,5 +133,5 @@ export function generateTiledGrid(rows: number, cols: number): Grid {
     }
   }
 
-  return grid;
+  return gridShapes;
 }

@@ -15,10 +15,10 @@ export interface Point {
 }
 export type Cell = { shape: ShapeKey; id: number } | null;
 
-// export type Shape = {
-//   id: number;
-//   key: ShapeKey;
-//   points: Point[];
-// };
+export type Shape = {
+  id: number;
+  key: ShapeKey;
+  points: Point[];
+};
 
 export type Grid = (Cell | null)[][];

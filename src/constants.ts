@@ -4,13 +4,13 @@ export const TILE_SIZE = 20;
 export const TILE_GAP = 2;
 
 export const COLORS: Record<ShapeKey, string> = {
-  I: "#00FFFF",
-  O: "#FFFF00",
-  T: "#800080",
-  S: "#00FF00",
-  Z: "#FF0000",
-  J: "#0000FF",
-  L: "#FFA500",
+  I: "#b2ebf2", // Pastel cyan
+  O: "#fff9b0", // Pastel yellow
+  T: "#d1b3ff", // Pastel purple
+  S: "#b6f5c9", // Pastel green
+  Z: "#ffc1c1", // Pastel red
+  J: "#b3d1ff", // Pastel blue
+  L: "#ffe0b3", // Pastel orange
 };
 
 export const BASE_SHAPES: Record<ShapeKey, Point[]> = {

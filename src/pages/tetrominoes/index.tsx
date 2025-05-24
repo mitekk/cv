@@ -1,12 +1,13 @@
 import { generateTiledGrid } from "../../services/grid/tiling";
 import { TILE_GAP, TILE_SIZE } from "../../constants";
 import { useEffect, useState } from "react";
-import type { Grid } from "../../types";
+import type { Shape } from "../../types";
 import Tile from "../../components/tile/tile";
 
 export const TetrominoesGrid: React.FC = () => {
   const [dims, setDims] = useState({ rows: 0, cols: 0 });
-  const [grid, setGrid] = useState<Grid>();
+  const [shapes, setShapes] = useState<Shape[]>([]);
+  const [animated, setAnimated] = useState(false);
 
   const handleResize = () => {
     const cols = Math.floor(
@@ -31,58 +32,62 @@ export const TetrominoesGrid: React.FC = () => {
     const { cols, rows } = dims;
     if (cols === 0 || rows === 0) return;
     setTimeout(() => {
-      const grid = generateTiledGrid(dims.rows, dims.cols);
-      setGrid(grid);
+      const gridShapes = generateTiledGrid(dims.rows, dims.cols);
+      setShapes(gridShapes);
     }, 0);
   }, [dims]);
 
-  return grid ? (
+  useEffect(() => {
+    setAnimated(false);
+    const timeout = setTimeout(() => setAnimated(true), 50); // delay to allow initial render
+    return () => clearTimeout(timeout);
+  }, [shapes]);
+
+  const width = dims.cols * TILE_SIZE + (dims.cols - 1) * TILE_GAP;
+  const height = dims.rows * TILE_SIZE + (dims.rows - 1) * TILE_GAP;
+
+  return shapes.length ? (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${grid[0].length}, ${TILE_SIZE}px)`,
-        gridTemplateRows: `repeat(${grid.length}, ${TILE_SIZE}px)`,
-        gap: `${TILE_GAP}px`,
-        background: "lightgray",
-        justifyContent: "center",
-        alignItems: "center",
         position: "relative",
+        width,
+        height,
+        background: "lightgray",
+        margin: "0 auto",
       }}
     >
-      {grid.map((row, y) =>
-        row.map((cell, x) => {
-          if (!cell) {
-            return (
-              <div
-                key={`${x},${y}`}
-                style={{
-                  width: TILE_SIZE,
-                  height: TILE_SIZE,
-                  background: "#111",
-                  position: "relative",
-                }}
-              />
-            );
-          }
-
-          const sameTop = y > 0 && grid[y - 1][x]?.id === cell.id;
-          const sameRight = x < row.length - 1 && row[x + 1]?.id === cell.id;
-          const sameBottom =
-            y < grid.length - 1 && grid[y + 1][x]?.id === cell.id;
-          const sameLeft = x > 0 && row[x - 1]?.id === cell.id;
+      {shapes
+        .sort((a, b) => a.points[0].x - b.points[0].x)
+        .map((shape, idx) => {
+          const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
+          const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
+          const startTop = -TILE_SIZE * 20;
 
           return (
-            <Tile
-              key={`${x},${y}`}
-              shape={cell.shape}
-              padTop={sameTop}
-              padLeft={sameLeft}
-              padRight={sameRight}
-              padBottom={sameBottom}
-            />
+            <div
+              key={shape.id}
+              style={{
+                position: "absolute",
+                left: finalLeft,
+                top: animated ? finalTop : startTop,
+                transition: `top 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) ${
+                  (shapes.length - 1 - idx) * 0.075
+                }s`,
+              }}
+            >
+              {shape.points.map(({ x, y }) => (
+                <Tile
+                  key={`${x}-${y}-${shape.key}`}
+                  shape={shape.key}
+                  style={{
+                    left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
+                    top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                  }}
+                />
+              ))}
+            </div>
           );
-        })
-      )}
+        })}
     </div>
   ) : null;
 };
