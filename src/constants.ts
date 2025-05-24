@@ -1,6 +1,7 @@
 import type { Point, ShapeKey } from "./types";
 
 export const TILE_SIZE = 20;
+export const TILE_GAP = 2;
 
 export const COLORS: Record<ShapeKey, string> = {
   I: "#00FFFF",

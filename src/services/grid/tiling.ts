@@ -1,14 +1,22 @@
 import { templates } from "../../assets/templates";
 import { BASE_SHAPES } from "../../constants";
-import type { Grid, Cell, TemplatePlacement, ShapeKey } from "../../types";
+import type {
+  Grid,
+  Cell,
+  TemplatePlacement,
+  ShapeKey,
+  ShapeRotation,
+  Point,
+  TemplateSize,
+} from "../../types";
 
 const createEmptyGrid = (rows: number, cols: number): Grid =>
   Array.from({ length: rows }, () => Array<Cell | null>(cols).fill(null));
 
-const findNextEmpty = (grid: Grid): [row: number, col: number] | null => {
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[0].length; j++) {
-      if (grid[i][j] === null) return [i, j];
+const findNextEmpty = (grid: Grid): Point | null => {
+  for (let x = 0; x < grid.length; x++) {
+    for (let y = 0; y < grid[0].length; y++) {
+      if (grid[x][y] === null) return { x, y };
     }
   }
   return null;
@@ -32,10 +40,9 @@ const canPlaceChunk = (
 };
 
 const rotatePoint = (
-  { x, y }: { x: number; y: number },
-  rotation: number
+  { x, y }: Point,
+  rotation: ShapeRotation
 ): { x: number; y: number } => {
-  // rotation: 0 = 0°, 1 = 90°, 2 = 180°, 3 = 270°
   switch (rotation % 4) {
     case 0:
       return { x, y };
@@ -58,7 +65,7 @@ const applyTemplate = (
   colPosition: number,
   placement: TemplatePlacement[]
 ) => {
-  placement.forEach(({ shape, rotation, x, y }) => {
+  placement.forEach(({ shape, rotation, anchor }) => {
     const shapeId = nextShapeId++;
     const baseOffsets = BASE_SHAPES[shape as ShapeKey];
     const rotatedOffsets = baseOffsets.map((pt) => rotatePoint(pt, rotation));
@@ -66,8 +73,8 @@ const applyTemplate = (
     const minY = Math.min(...rotatedOffsets.map((pt) => pt.y));
 
     rotatedOffsets.forEach((pt) => {
-      const gx = rowPosition + x + (pt.x - minX);
-      const gy = colPosition + y + (pt.y - minY);
+      const gx = rowPosition + anchor.x + (pt.x - minX);
+      const gy = colPosition + anchor.y + (pt.y - minY);
 
       if (gx >= 0 && gx < grid.length && gy >= 0 && gy < grid[0].length) {
         grid[gx][gy] = {
@@ -79,9 +86,9 @@ const applyTemplate = (
   });
 };
 
-const lastIndexBySize: Partial<Record<number, number>> = {};
+const lastIndexBySize: Partial<Record<TemplateSize, number>> = {};
 
-const chooseTemplate = (size: 4 | 8 | 16 | 32): TemplatePlacement[] => {
+const chooseTemplate = (size: TemplateSize): TemplatePlacement[] => {
   const arr = templates[size];
   const len = arr.length;
   let idx: number;
@@ -95,11 +102,11 @@ const chooseTemplate = (size: 4 | 8 | 16 | 32): TemplatePlacement[] => {
 
 export function generateTiledGrid(rows: number, cols: number): Grid {
   const grid = createEmptyGrid(rows, cols);
-  const sizes: Array<4 | 8 | 16 | 32> = [32, 16, 8, 4];
+  const sizes: Array<TemplateSize> = [32, 16, 8, 4];
 
-  let next: [number, number] | null;
+  let next: Point | null;
   while ((next = findNextEmpty(grid))) {
-    const [rowPosition, colPosition] = next;
+    const { x: rowPosition, y: colPosition } = next;
 
     let placed = false;
     for (const size of sizes) {

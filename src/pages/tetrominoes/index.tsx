@@ -1,20 +1,49 @@
 import { generateTiledGrid } from "../../services/grid/tiling";
-import { COLORS, TILE_SIZE } from "../../constants";
-
-const GAP = 2;
+import { TILE_GAP, TILE_SIZE } from "../../constants";
+import { useEffect, useState } from "react";
+import type { Grid } from "../../types";
+import Tile from "../../components/tile/tile";
 
 export const TetrominoesGrid: React.FC = () => {
-  const grid = generateTiledGrid(16, 32);
-  return (
+  const [dims, setDims] = useState({ rows: 0, cols: 0 });
+  const [grid, setGrid] = useState<Grid>();
+
+  const handleResize = () => {
+    const cols = Math.floor(
+      (window.innerWidth + TILE_GAP) / (TILE_SIZE + TILE_GAP)
+    );
+    const rows = Math.floor(
+      (window.innerHeight + TILE_GAP) / (TILE_SIZE + TILE_GAP)
+    );
+    setDims({
+      cols: Math.floor(cols / 4) * 4,
+      rows: Math.floor(rows / 4) * 4,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const { cols, rows } = dims;
+    if (cols === 0 || rows === 0) return;
+    setTimeout(() => {
+      const grid = generateTiledGrid(dims.rows, dims.cols);
+      setGrid(grid);
+    }, 0);
+  }, [dims]);
+
+  return grid ? (
     <div
       style={{
         display: "grid",
         gridTemplateColumns: `repeat(${grid[0].length}, ${TILE_SIZE}px)`,
         gridTemplateRows: `repeat(${grid.length}, ${TILE_SIZE}px)`,
-        gap: `${GAP}px`,
-        background: "#111",
-        height: "100vh",
-        width: "100vw",
+        gap: `${TILE_GAP}px`,
+        background: "lightgray",
         justifyContent: "center",
         alignItems: "center",
         position: "relative",
@@ -43,68 +72,17 @@ export const TetrominoesGrid: React.FC = () => {
           const sameLeft = x > 0 && row[x - 1]?.id === cell.id;
 
           return (
-            <div
+            <Tile
               key={`${x},${y}`}
-              style={{
-                width: TILE_SIZE,
-                height: TILE_SIZE,
-                background: COLORS[cell.shape],
-                position: "relative",
-                boxSizing: "border-box",
-              }}
-            >
-              {sameTop && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -GAP,
-                    left: 0,
-                    width: TILE_SIZE,
-                    height: GAP,
-                    background: COLORS[cell.shape],
-                  }}
-                />
-              )}
-              {sameRight && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: -GAP,
-                    width: GAP,
-                    height: TILE_SIZE,
-                    background: COLORS[cell.shape],
-                  }}
-                />
-              )}
-              {sameBottom && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: -GAP,
-                    left: 0,
-                    width: TILE_SIZE,
-                    height: GAP,
-                    background: COLORS[cell.shape],
-                  }}
-                />
-              )}
-              {sameLeft && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: -GAP,
-                    width: GAP,
-                    height: TILE_SIZE,
-                    background: COLORS[cell.shape],
-                  }}
-                />
-              )}
-            </div>
+              shape={cell.shape}
+              padTop={sameTop}
+              padLeft={sameLeft}
+              padRight={sameRight}
+              padBottom={sameBottom}
+            />
           );
         })
       )}
     </div>
-  );
+  ) : null;
 };
