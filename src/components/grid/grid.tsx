@@ -1,15 +1,30 @@
 import { generateTiledGrid } from "../../services/grid/tiling";
 import { TILE_GAP, TILE_SIZE } from "../../constants";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Tile } from "../../components/tile/tile";
 import type { Shape } from "../../types";
-import Tile from "../../components/tile/tile";
+import "./grid.css";
 
-export const TetrominoesGrid: React.FC = () => {
+interface TetrominoesGridProps {
+  onDropStart?: () => void;
+  onDropEnd?: (width: number, height: number) => void;
+}
+
+export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
+  onDropStart,
+  onDropEnd,
+}) => {
   const [dims, setDims] = useState({ rows: 0, cols: 0 });
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [animated, setAnimated] = useState(false);
 
-  const handleResize = () => {
+  const onDropStartRef = useRef(onDropStart);
+  useEffect(() => {
+    onDropStartRef.current = onDropStart;
+  }, [onDropStart]);
+
+  const handleResize = useCallback(() => {
+    if (onDropStartRef.current) onDropStartRef.current();
     const cols = Math.floor(
       (window.innerWidth + TILE_GAP) / (TILE_SIZE + TILE_GAP)
     );
@@ -20,28 +35,39 @@ export const TetrominoesGrid: React.FC = () => {
       cols: Math.floor(cols / 4) * 4,
       rows: Math.floor(rows / 4) * 4,
     });
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]);
 
   useEffect(() => {
     const { cols, rows } = dims;
     if (cols === 0 || rows === 0) return;
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const gridShapes = generateTiledGrid(dims.rows, dims.cols);
+      console.log("Generated grid shapes:", gridShapes);
+
       setShapes(gridShapes);
     }, 0);
+    return () => clearTimeout(timeout);
   }, [dims]);
 
   useEffect(() => {
     setAnimated(false);
-    const timeout = setTimeout(() => setAnimated(true), 50); // delay to allow initial render
+    const timeout = setTimeout(() => setAnimated(true), 500);
     return () => clearTimeout(timeout);
   }, [shapes]);
+
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
 
   const width = dims.cols * TILE_SIZE + (dims.cols - 1) * TILE_GAP;
   const height = dims.rows * TILE_SIZE + (dims.rows - 1) * TILE_GAP;
@@ -54,6 +80,7 @@ export const TetrominoesGrid: React.FC = () => {
         height,
         background: "lightgray",
         margin: "0 auto",
+        borderRadius: 3,
       }}
     >
       {shapes
@@ -63,16 +90,30 @@ export const TetrominoesGrid: React.FC = () => {
           const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
           const startTop = -TILE_SIZE * 20;
 
+          const centerX = finalLeft + 5;
+          const centerY = finalTop + 5;
+          const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
+          const isHovered = dist < 125;
+
           return (
             <div
               key={shape.id}
+              className={`shape-group${isHovered ? " hovered" : ""}`}
               style={{
                 position: "absolute",
                 left: finalLeft,
                 top: animated ? finalTop : startTop,
                 transition: `top 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) ${
-                  (shapes.length - 1 - idx) * 0.075
-                }s`,
+                  (shapes.length - 1 - idx) * 0.005
+                }s, transform 0.15s cubic-bezier(.4,0,.2,1)`,
+              }}
+              onTransitionEnd={(e) => {
+                if (
+                  e.propertyName === "top" &&
+                  shape.points.some(({ x, y }) => x === 0 && y === 0)
+                ) {
+                  if (onDropEnd) onDropEnd(width, height);
+                }
               }}
             >
               {shape.points.map(({ x, y }) => (

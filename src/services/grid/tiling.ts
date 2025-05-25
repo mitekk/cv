@@ -110,6 +110,7 @@ const chooseTemplate = (size: TemplateSize): TemplatePlacement[] => {
 };
 
 export function generateTiledGrid(rows: number, cols: number): Shape[] {
+  nextShapeId = 1;
   const grid = createEmptyGrid(rows, cols);
   const sizes: Array<TemplateSize> = [32, 16, 8, 4];
   const gridShapes: Shape[] = [];

@@ -1,0 +1,5 @@
+.shape-group.hovered {
+  transform: scale(1.03);
+  z-index: 2;
+  filter: brightness(0.97) grayscale(0.1);
+}

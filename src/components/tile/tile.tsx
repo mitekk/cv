@@ -7,7 +7,7 @@ interface TileProps extends HTMLAttributes<HTMLDivElement> {
   shape: ShapeKey;
 }
 
-export default function Tile({ style, shape }: TileProps) {
+export const Tile = ({ style, shape }: TileProps) => {
   const tileStyle: CSSProperties = {
     width: TILE_SIZE,
     height: TILE_SIZE,
@@ -24,4 +24,4 @@ export default function Tile({ style, shape }: TileProps) {
   };
 
   return <div className="tile" style={tileStyle}></div>;
-}
+};

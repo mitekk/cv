@@ -1,11 +1,11 @@
 import "./App.css";
 import { MainLayout } from "./layout/main.layout";
-import { TetrominoesGrid } from "./pages/tetrominoes";
+import { IntroPage } from "./pages/tetrominoes/intro";
 
 function App() {
   return (
     <MainLayout>
-      <TetrominoesGrid />
+      <IntroPage />
     </MainLayout>
   );
 }
