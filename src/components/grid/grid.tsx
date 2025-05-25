@@ -48,8 +48,6 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
     if (cols === 0 || rows === 0) return;
     const timeout = setTimeout(() => {
       const gridShapes = generateTiledGrid(dims.rows, dims.cols);
-      console.log("Generated grid shapes:", gridShapes);
-
       setShapes(gridShapes);
     }, 0);
     return () => clearTimeout(timeout);
@@ -57,7 +55,7 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
 
   useEffect(() => {
     setAnimated(false);
-    const timeout = setTimeout(() => setAnimated(true), 500);
+    const timeout = setTimeout(() => setAnimated(true), 50);
     return () => clearTimeout(timeout);
   }, [shapes]);
 
@@ -90,10 +88,10 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
           const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
           const startTop = -TILE_SIZE * 20;
 
-          const centerX = finalLeft + 5;
-          const centerY = finalTop + 5;
+          const centerX = finalLeft + TILE_SIZE;
+          const centerY = finalTop + TILE_SIZE;
           const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
-          const isHovered = dist < 125;
+          const isHovered = dist < 250;
 
           return (
             <div

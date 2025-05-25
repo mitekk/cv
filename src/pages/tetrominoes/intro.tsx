@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { TetrominoesGrid } from "../../components/grid/grid";
-import "./intro.css";
 
 export const IntroPage: React.FC = () => {
   const [dropLoading, setDropLoading] = useState(true);

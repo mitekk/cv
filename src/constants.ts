@@ -1,7 +1,7 @@
 import type { Point, ShapeKey } from "./types";
 
-export const TILE_SIZE = 20;
-export const TILE_GAP = 2;
+export const TILE_SIZE = 50;
+export const TILE_GAP = 3;
 
 export const COLORS: Record<ShapeKey, string> = {
   I: "#b2ebf2", // Pastel cyan
