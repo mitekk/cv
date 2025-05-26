@@ -29,7 +29,10 @@ export const IntroPage: React.FC = () => {
                 promptFinished ? " show" : ""
               }`}
             >
-              <Avatar src={avatarImg} className="flex items-center flex-1" />
+              <Avatar
+                src={avatarImg}
+                className="flex items-center flex-1 saturate-200"
+              />
               <div className="min-h-24"></div>
             </div>
             <div className="intro-text flex flex-col justify-center items-center">
