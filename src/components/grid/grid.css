@@ -3,7 +3,7 @@
 }
 
 .shape-group.hovered {
-  transform: scale(2);
+  transform: scale(1.5);
   z-index: 2;
   filter: brightness(1.05) grayscale(0.1);
 }

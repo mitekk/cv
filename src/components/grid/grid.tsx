@@ -6,22 +6,22 @@ import type { Shape } from "../../types";
 import "./grid.css";
 
 interface TetrominoesGridProps {
-  onDropStart?: () => void;
-  onDropEnd?: (width: number, height: number) => void;
+  onStart?: () => void;
+  onFinish?: (width: number, height: number) => void;
 }
 
 export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
-  onDropStart,
-  onDropEnd,
+  onStart,
+  onFinish,
 }) => {
   const [dims, setDims] = useState({ rows: 0, cols: 0 });
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [animated, setAnimated] = useState(false);
 
-  const onDropStartRef = useRef(onDropStart);
+  const onDropStartRef = useRef(onStart);
   useEffect(() => {
-    onDropStartRef.current = onDropStart;
-  }, [onDropStart]);
+    onDropStartRef.current = onStart;
+  }, [onStart]);
 
   const handleResize = useCallback(() => {
     if (onDropStartRef.current) onDropStartRef.current();
@@ -110,7 +110,7 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
                   e.propertyName === "top" &&
                   shape.points.some(({ x, y }) => x < 15 && y < 15)
                 ) {
-                  setTimeout(() => onDropEnd && onDropEnd(width, height), 1000);
+                  setTimeout(() => onFinish && onFinish(width, height), 1000);
                 }
               }}
             >

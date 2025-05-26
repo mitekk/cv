@@ -4,14 +4,19 @@ import "./prompter.css";
 
 interface PrompterProps {
   prompt: Prompt;
+  onStart?: () => void;
   onFinish?: () => void;
 }
 
-export const Prompter = ({ prompt, onFinish }: PrompterProps) => {
+export const Prompter = ({ prompt, onFinish, onStart }: PrompterProps) => {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [completedLines, setCompletedLines] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (onStart && currentLine < prompt.lines.length - 1) onStart();
+  }, [onStart]);
 
   useEffect(() => {
     if (!prompt.lines[currentLine]) return;

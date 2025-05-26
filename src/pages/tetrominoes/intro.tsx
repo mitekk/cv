@@ -4,24 +4,28 @@ import { Prompter } from "../../components/prompter/prompter";
 import { PromptLines } from "../../assets/prompts";
 import { Avatar, Button } from "../../components/UI";
 // import avatarImg from "../../assets/avatar.png";
-import avatarImg from "../../assets/mitya.jpg";
+// import avatarImg from "../../assets/mitya.jpg";
+import avatarImg from "../../assets/mitya2.png";
 import "./intro.css";
 
 export const IntroPage: React.FC = () => {
   const [dropFinished, setDropFinished] = useState(true);
   const [promptFinished, setPromptFinished] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
 
   return (
     <div className="intro-page">
-      <TetrominoesGrid
-        onDropEnd={() => {
-          setDropFinished(true);
-        }}
-        onDropStart={() => {
-          setDropFinished(false);
-        }}
-      />
-      {dropFinished && (
+      {!introFinished && (
+        <TetrominoesGrid
+          onStart={() => {
+            setDropFinished(false);
+          }}
+          onFinish={() => {
+            setDropFinished(true);
+          }}
+        />
+      )}
+      {!introFinished && dropFinished && (
         <div className="w-full h-screen z-[2] flex flex-col justify-center items-center absolute top-0 left-0 m-0 mx-auto">
           <div className="flex flex-row items-center w-fit">
             <div
@@ -31,13 +35,14 @@ export const IntroPage: React.FC = () => {
             >
               <Avatar
                 src={avatarImg}
-                className="flex items-center flex-1 saturate-200"
+                className="flex items-center flex-1 saturate-100"
               />
               <div className="min-h-24"></div>
             </div>
             <div className="intro-text flex flex-col justify-center items-center">
               <Prompter
                 prompt={{ lines: PromptLines.intro }}
+                onStart={() => setPromptFinished(false)}
                 onFinish={() => setPromptFinished(true)}
               />
               <div
@@ -45,7 +50,12 @@ export const IntroPage: React.FC = () => {
                   promptFinished ? " show" : ""
                 }`}
               >
-                <Button title="Get to know me" />
+                <Button
+                  title="Get to know me"
+                  onClick={() => {
+                    setIntroFinished(true);
+                  }}
+                />
               </div>
             </div>
           </div>
