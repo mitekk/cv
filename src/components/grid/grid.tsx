@@ -108,9 +108,9 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
               onTransitionEnd={(e) => {
                 if (
                   e.propertyName === "top" &&
-                  shape.points.some(({ x, y }) => x === 0 && y === 0)
+                  shape.points.some(({ x, y }) => x < 15 && y < 15)
                 ) {
-                  if (onDropEnd) onDropEnd(width, height);
+                  setTimeout(() => onDropEnd && onDropEnd(width, height), 1000);
                 }
               }}
             >

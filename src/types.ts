@@ -22,3 +22,12 @@ export type Shape = {
 };
 
 export type Grid = (Cell | null)[][];
+
+export type Prompt = {
+  lines: PromptLine[];
+};
+
+export type PromptLine = {
+  text: string;
+  removeOnComplete?: boolean;
+};
