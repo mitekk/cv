@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TetrominoesGrid } from "../../components/grid/grid";
 import { Prompter } from "../../components/prompter/prompter";
 import { PromptLines } from "../../assets/prompts";
@@ -6,26 +7,24 @@ import { Avatar, Button } from "../../components/UI";
 // import avatarImg from "../../assets/avatar.png";
 // import avatarImg from "../../assets/mitya.jpg";
 import avatarImg from "../../assets/mitya2.png";
-import "./intro.css";
+import "./introPage.css";
 
 export const IntroPage: React.FC = () => {
+  const navigate = useNavigate();
   const [dropFinished, setDropFinished] = useState(true);
   const [promptFinished, setPromptFinished] = useState(false);
-  const [introFinished, setIntroFinished] = useState(false);
 
   return (
     <div className="intro-page">
-      {!introFinished && (
-        <TetrominoesGrid
-          onStart={() => {
-            setDropFinished(false);
-          }}
-          onFinish={() => {
-            setDropFinished(true);
-          }}
-        />
-      )}
-      {!introFinished && dropFinished && (
+      <TetrominoesGrid
+        onStart={() => {
+          setDropFinished(false);
+        }}
+        onFinish={() => {
+          setDropFinished(true);
+        }}
+      />
+      {dropFinished && (
         <div className="w-full h-screen z-[2] flex flex-col justify-center items-center absolute top-0 left-0 m-0 mx-auto">
           <div className="flex flex-row items-center w-fit">
             <div
@@ -52,9 +51,7 @@ export const IntroPage: React.FC = () => {
               >
                 <Button
                   title="Get to know me"
-                  onClick={() => {
-                    setIntroFinished(true);
-                  }}
+                  onClick={() => navigate("/theBuzz")}
                 />
               </div>
             </div>
