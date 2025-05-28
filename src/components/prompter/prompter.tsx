@@ -4,19 +4,24 @@ import "./prompter.css";
 
 interface PrompterProps {
   prompt: Prompt;
-  onStart?: () => void;
-  onFinish?: () => void;
+  onAnimationStart?: () => void;
+  onAnimationFinish?: () => void;
 }
 
-export const Prompter = ({ prompt, onFinish, onStart }: PrompterProps) => {
+export const Prompter = ({
+  prompt,
+  onAnimationFinish,
+  onAnimationStart,
+}: PrompterProps) => {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [completedLines, setCompletedLines] = useState<string[]>([]);
 
   useEffect(() => {
-    if (onStart && currentLine < prompt.lines.length - 1) onStart();
-  }, [onStart]);
+    if (onAnimationStart && currentLine < prompt.lines.length - 1)
+      onAnimationStart();
+  }, [onAnimationStart, currentLine, prompt.lines.length]);
 
   useEffect(() => {
     if (!prompt.lines[currentLine]) return;
@@ -27,7 +32,7 @@ export const Prompter = ({ prompt, onFinish, onStart }: PrompterProps) => {
       timeout = setTimeout(() => {
         setTypedText(prompt.lines[currentLine].text.slice(0, currentChar + 1));
         setCurrentChar((idx) => idx + 1);
-      }, 100);
+      }, 90);
       return () => clearTimeout(timeout);
     } else {
       timeout = setTimeout(() => {
@@ -39,16 +44,16 @@ export const Prompter = ({ prompt, onFinish, onStart }: PrompterProps) => {
         setCurrentLine((idx) => idx + 1);
 
         if (currentLine === prompt.lines.length - 1) {
-          if (onFinish) onFinish();
+          if (onAnimationFinish) onAnimationFinish();
         }
 
         if (currentLine < prompt.lines.length - 1) {
           setCurrentChar(0);
         }
-      }, 500);
+      }, 40);
     }
     return () => clearTimeout(timeout);
-  }, [currentChar, currentLine, prompt.lines, onFinish]);
+  }, [currentChar, currentLine, prompt.lines, onAnimationFinish]);
 
   return (
     <div className="prompter">

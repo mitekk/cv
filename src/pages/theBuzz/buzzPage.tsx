@@ -1,10 +1,24 @@
+import { TetrominoesGrid } from "../../components/grid/grid";
+import { PageContext } from "../../context";
 import "./buzzPage.css";
 
 export const BuzzPage: React.FC = () => {
   return (
-    <div className="buzz-page">
-      <h1>The Buzz</h1>
-      <p>Welcome to the Buzz page! Stay tuned for updates.</p>
-    </div>
+    <PageContext.Provider
+      value={{
+        excitementLevel: "normal",
+      }}
+    >
+      <div className="buzz-page">
+        <TetrominoesGrid
+          onAnimationStart={() => {
+            console.log("Buzz grid started");
+          }}
+          onAnimationFinish={() => {
+            console.log("Buzz grid started");
+          }}
+        />
+      </div>
+    </PageContext.Provider>
   );
 };

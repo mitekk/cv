@@ -21,3 +21,76 @@
   transform: translateY(0);
   pointer-events: auto;
 }
+
+.avatar-animate-in {
+  animation: avatarSlideIn 0.7s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@keyframes avatarSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.avatar-animate-out {
+  animation: avatarSlideOut 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+@keyframes avatarSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+}
+
+.button-animate-in {
+  animation: buttonSlideIn 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@keyframes buttonSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prompt-animate-in {
+  animation: promptSlideToCenter 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@keyframes promptSlideToCenter {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.intro-animate-out {
+  animation: overlayExit 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+@keyframes overlayExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+}

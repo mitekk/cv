@@ -22,7 +22,8 @@
 .prompt-text {
   display: flex;
   font-weight: 900;
-  font-size: 6rem;
+  /* font-size: 6rem; */
+  font-size: 5rem;
   line-height: 7rem;
   color: #000401;
   margin-bottom: "0.5rem";
