@@ -1,14 +1,14 @@
 import { useContext, type CSSProperties, type HTMLAttributes } from "react";
 import { COLORS, SOFT_RICH_COLORS, TILE_SIZE } from "../../constants";
-import type { ShapeKey } from "../../types";
+import type { ShapeKeyTetrominoes } from "../../types";
 import { PageContext } from "../../context";
-import "./tile.css";
+import "./tetromino.tile.css";
 
-interface TileProps extends HTMLAttributes<HTMLDivElement> {
-  shape: ShapeKey;
+interface TetrominoTileProps extends HTMLAttributes<HTMLDivElement> {
+  shape: ShapeKeyTetrominoes;
 }
 
-export const Tile = ({ style, shape }: TileProps) => {
+export const TetrominoTile = ({ style, shape }: TetrominoTileProps) => {
   const { excitementLevel } = useContext(PageContext);
   const colors = excitementLevel === "high" ? COLORS : SOFT_RICH_COLORS;
 

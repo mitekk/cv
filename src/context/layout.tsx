@@ -1,14 +1,17 @@
 import { createContext } from "react";
 
-type LayoutContextType = {
-  dims: {
-    rows: number;
-    cols: number;
-  };
-  gridSize: {
-    width: number;
-    height: number;
-  };
+export type Dims = {
+  rows: number;
+  cols: number;
+};
+export type GridSize = {
+  width: number;
+  height: number;
+};
+
+export type LayoutContextType = {
+  dims: Dims;
+  gridSize: GridSize;
 };
 
 export const LayoutContext = createContext<LayoutContextType>({

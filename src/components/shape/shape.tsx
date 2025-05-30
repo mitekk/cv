@@ -1,20 +1,22 @@
-import { Tile } from "../tile/tile";
-import type { Shape, Point } from "../../types";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
-
-type AnimationEndProps = {
-  shapeId: number;
-  point: Point;
-};
+import type { Shape, ShapeKeyPath, ShapeKeyTetrominoes } from "../../types";
 
 export const TiledShape: React.FC<{
-  shape: Shape;
+  shape: Shape<ShapeKeyTetrominoes | ShapeKeyPath>;
   top: number;
   left: number;
   className?: string;
   styles?: React.CSSProperties;
-  onAnimationEnd?: ({ shapeId, point }: AnimationEndProps) => void;
-}> = ({ shape, top, left, styles, className = "", onAnimationEnd }) => {
+  onAnimationEnd?: () => void;
+  children?: React.ReactNode;
+}> = ({
+  shape,
+  top,
+  left,
+  styles,
+  className = "",
+  onAnimationEnd,
+  children,
+}) => {
   return (
     <div
       key={shape.id}
@@ -27,27 +29,11 @@ export const TiledShape: React.FC<{
       }}
       onTransitionEnd={(e) => {
         if (e.propertyName === "top") {
-          if (onAnimationEnd)
-            onAnimationEnd({
-              shapeId: shape.id,
-              point: {
-                x: left,
-                y: top,
-              },
-            });
+          if (onAnimationEnd) onAnimationEnd();
         }
       }}
     >
-      {shape.points.map(({ x, y }) => (
-        <Tile
-          key={`${x}-${y}-${shape.key}`}
-          shape={shape.key}
-          style={{
-            left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
-            top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
-          }}
-        />
-      ))}
+      {children}
     </div>
   );
 };

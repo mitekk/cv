@@ -1,9 +1,9 @@
-import type { Point, ShapeKey } from "./types";
+import type { Point, ShapeKeyTetrominoes } from "./types";
 
 export const TILE_SIZE = 50;
 export const TILE_GAP = 3;
 
-export const COLORS: Record<ShapeKey, string> = {
+export const COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#b2ebf2", // Pastel cyan
   O: "#fff9b0", // Pastel yellow
   T: "#d1b3ff", // Pastel purple
@@ -13,7 +13,7 @@ export const COLORS: Record<ShapeKey, string> = {
   L: "#ffe0b3", // Pastel orange
 };
 
-export const SOFT_COLORS: Record<ShapeKey, string> = {
+export const SOFT_COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#e0f3f5", // Softened cyan
   O: "#fffae0", // Softened yellow
   T: "#e8dff5", // Softened purple
@@ -23,7 +23,7 @@ export const SOFT_COLORS: Record<ShapeKey, string> = {
   L: "#fef1e3", // Softened orange
 };
 
-export const DARK_COLORS: Record<ShapeKey, string> = {
+export const DARK_COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#2bb7c6", // Deep cyan
   O: "#bba900", // Muted yellow-gold
   T: "#9256c9", // Muted purple
@@ -33,7 +33,7 @@ export const DARK_COLORS: Record<ShapeKey, string> = {
   L: "#e7a04e", // Muted orange
 };
 
-export const SOFT_DARK_COLORS: Record<ShapeKey, string> = {
+export const SOFT_DARK_COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#e4f6fa", // Very light cyan
   O: "#f9f6e0", // Very light gold/yellow
   T: "#ede7f6", // Very light purple
@@ -43,7 +43,7 @@ export const SOFT_DARK_COLORS: Record<ShapeKey, string> = {
   L: "#fdf4e5", // Very light orange
 };
 
-export const RICH_COLORS: Record<ShapeKey, string> = {
+export const RICH_COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#00bcd4", // Rich cyan
   O: "#ffd600", // Vivid yellow
   T: "#9c27b0", // Vibrant purple
@@ -53,7 +53,7 @@ export const RICH_COLORS: Record<ShapeKey, string> = {
   L: "#ff9800", // Bright orange
 };
 
-export const SOFT_RICH_COLORS: Record<ShapeKey, string> = {
+export const SOFT_RICH_COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#e0f7fa", // Very light cyan
   O: "#fffde7", // Very light yellow
   T: "#f3e5f5", // Very light purple
@@ -63,7 +63,7 @@ export const SOFT_RICH_COLORS: Record<ShapeKey, string> = {
   L: "#fff3e0", // Very light orange
 };
 
-export const BASE_SHAPES: Record<ShapeKey, Point[]> = {
+export const BASE_SHAPES: Record<ShapeKeyTetrominoes, Point[]> = {
   // I I I I
   // . . . .
   // . . . .

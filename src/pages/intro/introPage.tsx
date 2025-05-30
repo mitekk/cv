@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TetrominoesGrid } from "../../components/grid/grid";
+
 import { Prompter } from "../../components/prompter/prompter";
 import { PromptLines } from "../../assets/prompts";
 import { Avatar, Button } from "../../components/UI";
 // import avatarImg from "../../assets/avatar.png";
 // import avatarImg from "../../assets/mitya.jpg";
 import avatarImg from "../../assets/mitya2.png";
-import "./introPage.css";
 import { LayoutContext } from "../../context/layout";
+import { RoadTripGrid, TetrominoesGrid } from "../../components/grid";
+import "./introPage.css";
 
 export const IntroPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export const IntroPage: React.FC = () => {
 
   return (
     <>
-      <TetrominoesGrid
+      <RoadTripGrid
         onAnimationStart={() => {
           setDropFinished(false);
           setIntroFinished(false);

@@ -1,15 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { LayoutContext } from "../../context/layout";
-import { generateTiledGrid } from "../../services/grid/tiling";
 import { TILE_GAP, TILE_SIZE } from "../../constants";
 import { TiledShape } from "../shape/shape";
-import type { Shape } from "../../types";
-import "./grid.css";
+import type { Shape, ShapeKeyTetrominoes } from "../../types";
 import { PageContext } from "../../context";
+import { generateTiledGrid } from "../../services/grid";
+import { TetrominoTile } from "../tile";
+import "./tetrominoes.grid.css";
 
 interface TetrominoesGridProps {
   onAnimationStart?: () => void;
-  onAnimationFinish?: (width: number, height: number) => void;
+  onAnimationFinish?: () => void;
   removeTiles?: boolean;
 }
 
@@ -18,9 +19,9 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
   onAnimationFinish,
   removeTiles = false,
 }) => {
-  const [shapes, setShapes] = useState<Shape[]>([]);
+  const [shapes, setShapes] = useState<Shape<ShapeKeyTetrominoes>[]>([]);
   const [animated, setAnimated] = useState(false);
-  const { dims } = useContext(LayoutContext);
+  const { dims, gridSize } = useContext(LayoutContext);
   const { excitementLevel } = useContext(PageContext);
 
   const onDropStartRef = useRef(onAnimationStart);
@@ -60,7 +61,7 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
     }
     animationEndTimeout.current = setTimeout(() => {
       if (onAnimationFinish) {
-        onAnimationFinish(width, height);
+        onAnimationFinish();
       }
     }, 150);
   };
@@ -73,15 +74,12 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
-  const width = dims.cols * TILE_SIZE + (dims.cols - 1) * TILE_GAP;
-  const height = dims.rows * TILE_SIZE + (dims.rows - 1) * TILE_GAP;
-
   return shapes.length ? (
     <div
       style={{
         position: "relative",
-        width,
-        height,
+        width: gridSize.width,
+        height: gridSize.height,
         overflow: "hidden",
       }}
     >
@@ -120,7 +118,18 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
                 filter: isHovered ? "grayscale(0.1) saturate(1.2)" : "",
               }}
               onAnimationEnd={handleAnimationEnd}
-            ></TiledShape>
+            >
+              {shape.points.map(({ x, y }) => (
+                <TetrominoTile
+                  key={`${x}-${y}-${shape.key}`}
+                  shape={shape.key}
+                  style={{
+                    left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
+                    top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                  }}
+                />
+              ))}
+            </TiledShape>
           );
         })}
     </div>

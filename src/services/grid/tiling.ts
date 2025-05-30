@@ -4,7 +4,7 @@ import type {
   Grid,
   Cell,
   TemplatePlacement,
-  ShapeKey,
+  ShapeKeyTetrominoes,
   ShapeRotation,
   Point,
   TemplateSize,
@@ -69,19 +69,26 @@ const applyTemplate = (
   placement.map(({ shape, rotation, anchor }) => {
     const shapeId = nextShapeId++;
 
-    const baseOffsets = BASE_SHAPES[shape as ShapeKey];
-    const rotatedOffsets = baseOffsets.map((pt) => rotatePoint(pt, rotation));
-    const minX = Math.min(...rotatedOffsets.map((pt) => pt.x));
-    const minY = Math.min(...rotatedOffsets.map((pt) => pt.y));
+    const baseOffsets = BASE_SHAPES[shape as ShapeKeyTetrominoes];
+    const rotatedOffsets = baseOffsets.map((basePoint) =>
+      rotatePoint(basePoint, rotation)
+    );
+    const minX = Math.min(...rotatedOffsets.map((basePoint) => basePoint.x));
+    const minY = Math.min(...rotatedOffsets.map((basePoint) => basePoint.y));
 
     const shapePoints: Point[] = [];
-    rotatedOffsets.forEach((pt) => {
-      const gx = rowPosition + anchor.x + (pt.x - minX);
-      const gy = colPosition + anchor.y + (pt.y - minY);
+    rotatedOffsets.forEach((basePoint) => {
+      const normX = rowPosition + anchor.x + (basePoint.x - minX);
+      const normY = colPosition + anchor.y + (basePoint.y - minY);
 
-      if (gx >= 0 && gx < grid.length && gy >= 0 && gy < grid[0].length) {
-        shapePoints.push({ x: gx, y: gy });
-        grid[gx][gy] = {
+      if (
+        normX >= 0 &&
+        normX < grid.length &&
+        normY >= 0 &&
+        normY < grid[0].length
+      ) {
+        shapePoints.push({ x: normX, y: normY });
+        grid[normX][normY] = {
           id: shapeId,
           shape: shape,
         };
@@ -98,22 +105,24 @@ const applyTemplate = (
 const lastIndexBySize: Partial<Record<TemplateSize, number>> = {};
 
 const chooseTemplate = (size: TemplateSize): TemplatePlacement[] => {
-  const arr = templates[size];
-  const len = arr.length;
-  let idx: number;
+  const tilingTemplate = templates[size];
+  let templateIndex: number;
   const prev = lastIndexBySize[size];
   do {
-    idx = Math.floor(Math.random() * len);
-  } while (len > 1 && idx === prev);
-  lastIndexBySize[size] = idx;
-  return arr[idx];
+    templateIndex = Math.floor(Math.random() * tilingTemplate.length);
+  } while (tilingTemplate.length > 1 && templateIndex === prev);
+  lastIndexBySize[size] = templateIndex;
+  return tilingTemplate[templateIndex];
 };
 
-export function generateTiledGrid(rows: number, cols: number): Shape[] {
+export function generateTiledGrid(
+  rows: number,
+  cols: number
+): Shape<ShapeKeyTetrominoes>[] {
   nextShapeId = 1;
   const grid = createEmptyGrid(rows, cols);
   const sizes: Array<TemplateSize> = [32, 16, 8, 4];
-  const gridShapes: Shape[] = [];
+  const gridShapes: Shape<ShapeKeyTetrominoes>[] = [];
 
   let next: Point | null;
   while ((next = findNextEmpty(grid))) {
@@ -121,8 +130,10 @@ export function generateTiledGrid(rows: number, cols: number): Shape[] {
     let placed = false;
     for (const size of sizes) {
       if (canPlaceChunk(grid, rowPosition, colPosition, size)) {
-        const tpl = chooseTemplate(size);
-        gridShapes.push(...applyTemplate(grid, rowPosition, colPosition, tpl));
+        const template = chooseTemplate(size);
+        gridShapes.push(
+          ...applyTemplate(grid, rowPosition, colPosition, template)
+        );
         placed = true;
         break;
       }

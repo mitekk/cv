@@ -2,22 +2,23 @@ export type ShapeRotation = 0 | 1 | 2 | 3; // 0 = 0°, 1 = 90°, 2 = 180°, 3 = 
 
 export type TemplateSize = 4 | 8 | 16 | 32;
 export interface TemplatePlacement {
-  shape: ShapeKey;
+  shape: ShapeKeyTetrominoes;
   rotation: ShapeRotation;
   anchor: Point;
 }
 export type Template = TemplatePlacement[];
 
-export type ShapeKey = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
+export type ShapeKeyTetrominoes = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
+export type ShapeKeyPath = "empty" | "path" | "mountain" | "tree" | "house";
 export interface Point {
   x: number;
   y: number;
 }
-export type Cell = { shape: ShapeKey; id: number } | null;
+export type Cell = { shape: ShapeKeyTetrominoes; id: number } | null;
 
-export type Shape = {
+export type Shape<T> = {
   id: number;
-  key: ShapeKey;
+  key: T;
   points: Point[];
 };
 

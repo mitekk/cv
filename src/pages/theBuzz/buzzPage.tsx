@@ -1,4 +1,4 @@
-import { TetrominoesGrid } from "../../components/grid/grid";
+import { TetrominoesGrid } from "../../components/grid";
 import { PageContext } from "../../context";
 import "./buzzPage.css";
 

@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { LayoutContext } from "../context";
 import { TILE_GAP, TILE_SIZE } from "../constants";
+import type { Dims } from "../context/layout";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 export function MainLayout({ children }: MainLayoutProps) {
-  const [dims, setDims] = useState({ rows: 0, cols: 0 });
+  const [dims, setDims] = useState<Dims>({ rows: 0, cols: 0 });
   const [gridSize, setGridSize] = useState({
     width: 0,
     height: 0,
