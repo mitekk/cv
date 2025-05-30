@@ -1,7 +1,6 @@
 import { type CSSProperties, type HTMLAttributes } from "react";
 import { TILE_SIZE } from "../../constants";
 import type { ShapeKeyPath } from "../../types";
-import "./tetromino.tile.css";
 
 interface RoadTripTileProps extends HTMLAttributes<HTMLDivElement> {
   shape: ShapeKeyPath;
@@ -26,18 +25,48 @@ export const RoadTripTile = ({ style, shape }: RoadTripTileProps) => {
   return (
     <div style={tileStyle}>
       {shape === "tree" && (
-        <span role="img" aria-label="tree" style={{ fontSize: 24 }}>
-          🌲🌲
+        <span
+          role="img"
+          aria-label="tree"
+          style={{ fontSize: 30, userSelect: "none" }}
+        >
+          🌲
+        </span>
+      )}
+      {shape === "tree2" && (
+        <span
+          role="img"
+          aria-label="tree"
+          style={{ fontSize: 30, userSelect: "none" }}
+        >
+          🌳
         </span>
       )}
       {shape === "mountain" && (
-        <span role="img" aria-label="grass" style={{ fontSize: 40 }}>
+        <span
+          role="img"
+          aria-label="mountain"
+          style={{ fontSize: 30, userSelect: "none" }}
+        >
           ⛰️
         </span>
       )}
       {shape === "house" && (
-        <span role="img" aria-label="grass" style={{ fontSize: 30 }}>
-          🏡
+        <span
+          role="img"
+          aria-label="house"
+          style={{ fontSize: 30, userSelect: "none" }}
+        >
+          🛖
+        </span>
+      )}
+      {shape === "rhino" && (
+        <span
+          role="img"
+          aria-label="rhino"
+          style={{ fontSize: 30, userSelect: "none" }}
+        >
+          🦏
         </span>
       )}
     </div>

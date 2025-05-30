@@ -9,7 +9,14 @@ export interface TemplatePlacement {
 export type Template = TemplatePlacement[];
 
 export type ShapeKeyTetrominoes = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
-export type ShapeKeyPath = "empty" | "path" | "mountain" | "tree" | "house";
+export type ShapeKeyPath =
+  | "empty"
+  | "path"
+  | "mountain"
+  | "tree"
+  | "tree2"
+  | "house"
+  | "rhino";
 export interface Point {
   x: number;
   y: number;

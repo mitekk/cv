@@ -66,11 +66,15 @@ export const generateShapes = (
     for (let y = 0; y < dims.cols; y++) {
       if (path.some((p) => p.x === x && p.y === y)) {
         shapes.push({ id: id++, key: "path", points: [{ x, y }] });
-      } else if (Math.random() < 0.22) {
+      } else if (Math.random() < 0.104) {
         shapes.push({ id: id++, key: "mountain", points: [{ x, y }] });
-      } else if (Math.random() < 0.21) {
+      } else if (Math.random() < 0.103) {
         shapes.push({ id: id++, key: "tree", points: [{ x, y }] });
-      } else if (Math.random() < 0.2) {
+      } else if (Math.random() < 0.102) {
+        shapes.push({ id: id++, key: "tree2", points: [{ x, y }] });
+      } else if (Math.random() < 0.101) {
+        shapes.push({ id: id++, key: "rhino", points: [{ x, y }] });
+      } else if (Math.random() < 0.1) {
         shapes.push({ id: id++, key: "house", points: [{ x, y }] });
       } else {
         shapes.push({ id: id++, key: "empty", points: [{ x, y }] });
