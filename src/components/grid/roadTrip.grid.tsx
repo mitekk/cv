@@ -1,59 +1,71 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContext } from "../../context";
 import {
   generatePath,
   generateShapes,
   getPathData,
 } from "../../services/grid/path";
-import type { Point, Shape, ShapeKeyPath } from "../../types";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
 import { TiledShape } from "../shape/shape";
 import { RoadTripTile } from "../tile";
-import "./roadTrip.grid.css";
 import { RoadPath } from "../roadPath";
+import { TILE_GAP, TILE_SIZE } from "../../constants";
+import type { Point, Shape, ShapeKeyPath } from "../../types";
+import "./roadTrip.grid.css";
 
 interface RoadTripProps {
+  onAnimationStart?: () => void;
   onAnimationFinish?: () => void;
   removeTiles?: boolean;
 }
 
 export const RoadTripGrid: React.FC<RoadTripProps> = ({
   onAnimationFinish = () => {},
+  removeTiles = false,
 }) => {
   const animationEndTimeout = useRef<number | null>(null);
   const { dims, gridSize } = useContext(LayoutContext);
   const [animated, setAnimated] = useState(false);
-  const [pathPoints, setPathPoints] = useState<Point[]>([]);
-  const [shapes, setShapes] = useState<Shape<ShapeKeyPath>[]>([]);
-  const [pathData, setPathData] = useState<string>("");
   const [gridAnimationFinished, setGridAnimationFinished] = useState(false);
 
-  useEffect(() => {
-    if (dims.cols === 0 || dims.rows === 0) return;
-    const timeout = setTimeout(() => {
-      const pathPoints = generatePath(dims);
-      setPathPoints(pathPoints);
-    }, 0);
-    return () => clearTimeout(timeout);
-  }, [dims]);
+  const pathPoints = useMemo<Point[]>(() => {
+    if (dims.cols === 0 || dims.rows === 0) return [];
+    return generatePath({
+      rows: dims.rows,
+      cols: dims.cols,
+    });
+  }, [dims.cols, dims.rows]);
 
-  useEffect(() => {
-    if (dims.cols === 0 || dims.rows === 0) return;
-    const timeout = setTimeout(() => {
-      const shapes = generateShapes(dims, pathPoints);
-      setShapes(shapes);
+  const shapes = useMemo<Shape<ShapeKeyPath>[]>(() => {
+    if (dims.cols === 0 || dims.rows === 0) return [];
+    return generateShapes(
+      {
+        rows: dims.rows,
+        cols: dims.cols,
+      },
+      pathPoints
+    );
+  }, [dims.rows, dims.cols, pathPoints]);
 
-      const path = getPathData(pathPoints);
-      setPathData(path);
-    }, 0);
-    return () => clearTimeout(timeout);
-  }, [dims, pathPoints]);
+  const pathData = useMemo<string>(() => {
+    return getPathData(pathPoints);
+  }, [pathPoints]);
 
   useEffect(() => {
     setAnimated(false);
-    const timeout = setTimeout(() => setAnimated(true), 50);
+    setGridAnimationFinished(false);
+    const timeout = setTimeout(() => {
+      setAnimated(true);
+    }, 50);
     return () => clearTimeout(timeout);
   }, [shapes]);
+
+  useEffect(() => {
+    if (removeTiles) {
+      setAnimated(false);
+      const timeout = setTimeout(() => setAnimated(true), 50);
+      return () => clearTimeout(timeout);
+    }
+  }, [removeTiles]);
 
   const handleGridAnimationEnd = () => {
     if (animationEndTimeout.current) {
@@ -65,7 +77,7 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
   };
 
   return shapes.length ? (
-    <div className="relative filter sepia">
+    <div className="relative filter sepia brightness-150">
       <div
         style={{
           position: "relative",
@@ -77,7 +89,13 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
         {shapes.map((shape, idx) => {
           const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
           const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
-          const top = animated ? finalTop : -dims.cols * TILE_SIZE * 2;
+
+          let top;
+          if (!removeTiles) {
+            top = animated ? finalTop : -dims.cols * TILE_SIZE * 2;
+          } else {
+            top = animated ? finalTop + dims.cols * TILE_SIZE * 2 : finalTop;
+          }
 
           return (
             <TiledShape
@@ -109,19 +127,15 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
       <svg
         width={gridSize.width}
         height={gridSize.height}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
+        className="absolute top-0 left-0 z-[2] pointer-events-none"
       >
-        <RoadPath
-          pathData={pathData}
-          startAnimation={gridAnimationFinished}
-          onAnimationFinish={() => onAnimationFinish()}
-        />
+        {!removeTiles && (
+          <RoadPath
+            pathData={pathData}
+            startAnimation={gridAnimationFinished}
+            onAnimationFinish={() => onAnimationFinish()}
+          />
+        )}
       </svg>
     </div>
   ) : null;

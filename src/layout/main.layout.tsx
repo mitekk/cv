@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { LayoutContext } from "../context";
-import { TILE_GAP, TILE_SIZE } from "../constants";
+import { Header } from "../components/header/header";
 import type { Dims } from "../context/layout";
+import type { GameMode } from "../types";
+import { GAME_MODE_OPTIONS, TILE_GAP, TILE_SIZE } from "../constants";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -13,6 +15,10 @@ export function MainLayout({ children }: MainLayoutProps) {
     width: 0,
     height: 0,
   });
+  const [selectedMode, setSelectedMode] = useState<GameMode>(
+    GAME_MODE_OPTIONS[0]
+  );
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
   const handleResize = useCallback(() => {
     const cols = Math.floor(
@@ -26,6 +32,14 @@ export function MainLayout({ children }: MainLayoutProps) {
       rows: Math.floor(rows / 4) * 4,
     });
   }, []);
+
+  useEffect(() => {
+    if (reloadTrigger > 0) {
+      setSelectedMode(
+        GAME_MODE_OPTIONS[reloadTrigger % GAME_MODE_OPTIONS.length]
+      );
+    }
+  }, [reloadTrigger]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -43,8 +57,15 @@ export function MainLayout({ children }: MainLayoutProps) {
   }, [dims]);
 
   return (
-    <LayoutContext.Provider value={{ dims, gridSize }}>
-      <main className="h-screen flex justify-center items-center bg-[#4c4b4c]">
+    <LayoutContext.Provider value={{ dims, gridSize, gameMode: selectedMode }}>
+      <main className="relative h-screen flex flex-col justify-center items-center bg-[#4c4b4c]">
+        <Header
+          gameMode={selectedMode}
+          onModeChange={setSelectedMode}
+          onReload={() => {
+            setReloadTrigger((prev) => prev + 1);
+          }}
+        />
         <div
           style={{
             width: gridSize.width,

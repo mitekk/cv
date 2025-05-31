@@ -16,20 +16,36 @@ export const IntroPage: React.FC = () => {
   const [dropFinished, setDropFinished] = useState(false);
   const [promptFinished, setPromptFinished] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
-  const { dims } = useContext(LayoutContext);
+  const { dims, gameMode } = useContext(LayoutContext);
 
   return (
     <>
-      <RoadTripGrid
-        onAnimationStart={() => {
-          setDropFinished(false);
-          setIntroFinished(false);
-        }}
-        onAnimationFinish={() => {
-          setDropFinished(true);
-        }}
-        removeTiles={introFinished}
-      />
+      {gameMode === "Road Trip" && (
+        <RoadTripGrid
+          onAnimationStart={() => {
+            setDropFinished(false);
+            setIntroFinished(false);
+          }}
+          onAnimationFinish={() => {
+            setDropFinished(true);
+          }}
+          removeTiles={introFinished}
+        />
+      )}
+
+      {gameMode === "Tetris" && (
+        <TetrominoesGrid
+          onAnimationStart={() => {
+            setDropFinished(false);
+            setIntroFinished(false);
+          }}
+          onAnimationFinish={() => {
+            setDropFinished(true);
+          }}
+          removeTiles={introFinished}
+        />
+      )}
+
       {dropFinished && !introFinished && (
         <div
           className={`w-full h-screen z-[2] flex flex-col justify-center items-center absolute top-0 left-0 m-0 mx-auto intro-overlay${

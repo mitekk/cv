@@ -39,3 +39,5 @@ export type PromptLine = {
   text: string;
   removeOnComplete?: boolean;
 };
+
+export type GameMode = "Tetris" | "Road Trip";

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContext } from "../../context/layout";
 import { TILE_GAP, TILE_SIZE } from "../../constants";
 import { TiledShape } from "../shape/shape";
@@ -19,7 +19,6 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
   onAnimationFinish,
   removeTiles = false,
 }) => {
-  const [shapes, setShapes] = useState<Shape<ShapeKeyTetrominoes>[]>([]);
   const [animated, setAnimated] = useState(false);
   const { dims, gridSize } = useContext(LayoutContext);
   const { excitementLevel } = useContext(PageContext);
@@ -29,15 +28,10 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
     onDropStartRef.current = onAnimationStart;
   }, [onAnimationStart]);
 
-  useEffect(() => {
-    const { cols, rows } = dims;
-    if (cols === 0 || rows === 0) return;
-    const timeout = setTimeout(() => {
-      const gridShapes = generateTiledGrid(dims.rows, dims.cols);
-      setShapes(gridShapes);
-    }, 0);
-    return () => clearTimeout(timeout);
-  }, [dims]);
+  const shapes = useMemo<Shape<ShapeKeyTetrominoes>[]>(() => {
+    if (dims.cols === 0 || dims.rows === 0) return [];
+    return generateTiledGrid(dims.rows, dims.cols);
+  }, [dims.rows, dims.cols]);
 
   useEffect(() => {
     setAnimated(false);
@@ -76,11 +70,10 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
 
   return shapes.length ? (
     <div
+      className="relative overflow-hidden"
       style={{
-        position: "relative",
         width: gridSize.width,
         height: gridSize.height,
-        overflow: "hidden",
       }}
     >
       {shapes
