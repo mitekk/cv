@@ -15,18 +15,12 @@ interface TetrominoesGridProps {
 }
 
 export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
-  onAnimationStart,
   onAnimationFinish,
   removeTiles = false,
 }) => {
   const [animated, setAnimated] = useState(false);
   const { dims, gridSize } = useContext(LayoutContext);
   const { excitementLevel } = useContext(PageContext);
-
-  const onDropStartRef = useRef(onAnimationStart);
-  useEffect(() => {
-    onDropStartRef.current = onAnimationStart;
-  }, [onAnimationStart]);
 
   const shapes = useMemo<Shape<ShapeKeyTetrominoes>[]>(() => {
     if (dims.cols === 0 || dims.rows === 0) return [];

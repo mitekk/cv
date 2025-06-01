@@ -1,10 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContext, PageContext } from "../../context";
-import {
-  generatePath,
-  generateShapes,
-  getPathData,
-} from "../../services/grid/path";
+import { generatePath, generateShapes, getPathData } from "../../services/grid";
 import { TiledShape } from "../shape/shape";
 import { RoadTripTile } from "../tile";
 import { RoadPath } from "../roadPath";

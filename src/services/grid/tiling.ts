@@ -11,10 +11,15 @@ import type {
   Shape,
 } from "../../types";
 
-const createEmptyGrid = (rows: number, cols: number): Grid =>
-  Array.from({ length: rows }, () => Array<Cell | null>(cols).fill(null));
+const createEmptyGrid = (
+  rows: number,
+  cols: number
+): Grid<ShapeKeyTetrominoes> =>
+  Array.from({ length: rows }, () =>
+    Array<Cell<ShapeKeyTetrominoes> | null>(cols).fill(null)
+  );
 
-const findNextEmpty = (grid: Grid): Point | null => {
+const findNextEmpty = (grid: Grid<ShapeKeyTetrominoes>): Point | null => {
   for (let x = 0; x < grid.length; x++) {
     for (let y = 0; y < grid[0].length; y++) {
       if (grid[x][y] === null) return { x, y };
@@ -24,7 +29,7 @@ const findNextEmpty = (grid: Grid): Point | null => {
 };
 
 const canPlaceChunk = (
-  grid: Grid,
+  grid: Grid<ShapeKeyTetrominoes>,
   rowPosition: number,
   colPosition: number,
   size: number
@@ -61,7 +66,7 @@ const rotatePoint = (
 let nextShapeId = 1;
 
 const applyTemplate = (
-  grid: Grid,
+  grid: Grid<ShapeKeyTetrominoes>,
   rowPosition: number,
   colPosition: number,
   placement: TemplatePlacement[]

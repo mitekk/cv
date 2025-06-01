@@ -4,6 +4,7 @@ import type { ShapeKeyPath } from "../../types";
 
 interface RoadTripTileProps extends HTMLAttributes<HTMLDivElement> {
   shape: ShapeKeyPath;
+  style?: CSSProperties;
 }
 
 export const RoadTripTile = ({ style, shape }: RoadTripTileProps) => {

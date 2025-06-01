@@ -2,7 +2,11 @@ import type { GameMode, Point, ShapeKeyTetrominoes } from "./types";
 
 export const TILE_SIZE = 50;
 export const TILE_GAP = 3;
-export const GAME_MODE_OPTIONS: GameMode[] = ["Tetris", "Road Trip"];
+export const GAME_MODE_OPTIONS: GameMode[] = [
+  "Tetris",
+  "Road Trip",
+  "Game of Life",
+];
 
 export const COLORS: Record<ShapeKeyTetrominoes, string> = {
   I: "#b2ebf2", // Pastel cyan

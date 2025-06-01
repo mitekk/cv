@@ -8,7 +8,11 @@ import { Avatar, Button } from "../../components/UI";
 // import avatarImg from "../../assets/mitya.jpg";
 import avatarImg from "../../assets/mitya2.png";
 import { LayoutContext } from "../../context/layout";
-import { RoadTripGrid, TetrominoesGrid } from "../../components/grid";
+import {
+  GameOfLifeGrid,
+  RoadTripGrid,
+  TetrominoesGrid,
+} from "../../components/grid";
 import "./introPage.css";
 
 export const IntroPage: React.FC = () => {
@@ -35,6 +39,19 @@ export const IntroPage: React.FC = () => {
 
       {gameMode === "Tetris" && (
         <TetrominoesGrid
+          onAnimationStart={() => {
+            setDropFinished(false);
+            setIntroFinished(false);
+          }}
+          onAnimationFinish={() => {
+            setDropFinished(true);
+          }}
+          removeTiles={introFinished}
+        />
+      )}
+
+      {gameMode === "Game of Life" && (
+        <GameOfLifeGrid
           onAnimationStart={() => {
             setDropFinished(false);
             setIntroFinished(false);

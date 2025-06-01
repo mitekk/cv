@@ -8,6 +8,7 @@ export interface TemplatePlacement {
 }
 export type Template = TemplatePlacement[];
 
+export type ShapeKeyGameOfLife = "dead" | "alive";
 export type ShapeKeyTetrominoes = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
 export type ShapeKeyPath =
   | "empty"
@@ -21,7 +22,10 @@ export interface Point {
   x: number;
   y: number;
 }
-export type Cell = { shape: ShapeKeyTetrominoes; id: number } | null;
+export type Cell<T> = {
+  shape: T;
+  id: number;
+} | null;
 
 export type Shape<T> = {
   id: number;
@@ -29,7 +33,7 @@ export type Shape<T> = {
   points: Point[];
 };
 
-export type Grid = (Cell | null)[][];
+export type Grid<T> = (Cell<T> | null)[][];
 
 export type Prompt = {
   lines: PromptLine[];
@@ -40,4 +44,4 @@ export type PromptLine = {
   removeOnComplete?: boolean;
 };
 
-export type GameMode = "Tetris" | "Road Trip";
+export type GameMode = "Tetris" | "Road Trip" | "Game of Life";

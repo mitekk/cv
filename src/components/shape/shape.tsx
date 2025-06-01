@@ -1,7 +1,12 @@
-import type { Shape, ShapeKeyPath, ShapeKeyTetrominoes } from "../../types";
+import type {
+  Shape,
+  ShapeKeyGameOfLife,
+  ShapeKeyPath,
+  ShapeKeyTetrominoes,
+} from "../../types";
 
 export const TiledShape: React.FC<{
-  shape: Shape<ShapeKeyTetrominoes | ShapeKeyPath>;
+  shape: Shape<ShapeKeyTetrominoes | ShapeKeyPath | ShapeKeyGameOfLife>;
   top: number;
   left: number;
   className?: string;
