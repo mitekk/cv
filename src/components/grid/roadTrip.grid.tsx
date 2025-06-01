@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { LayoutContext } from "../../context";
+import { LayoutContext, PageContext } from "../../context";
 import {
   generatePath,
   generateShapes,
@@ -24,6 +24,7 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
 }) => {
   const animationEndTimeout = useRef<number | null>(null);
   const { dims, gridSize } = useContext(LayoutContext);
+  const { excitementLevel } = useContext(PageContext);
   const [animated, setAnimated] = useState(false);
   const [gridAnimationFinished, setGridAnimationFinished] = useState(false);
 
@@ -76,6 +77,14 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
     }, 150);
   };
 
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+
   return shapes.length ? (
     <div className="relative filter sepia brightness-150">
       <div
@@ -97,6 +106,13 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
             top = animated ? finalTop + dims.cols * TILE_SIZE * 2 : finalTop;
           }
 
+          const centerX = finalLeft + TILE_SIZE;
+          const centerY = finalTop + TILE_SIZE;
+          const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
+          const isHovered =
+            dist < (excitementLevel === "high" ? TILE_SIZE * 4 : TILE_SIZE * 0);
+          const hoverScale = excitementLevel === "high" ? 0.95 : 1.0;
+
           return (
             <TiledShape
               key={`${shape.id}`}
@@ -107,6 +123,7 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
                 transition: `top 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) ${
                   (shapes.length - idx) * 0.001
                 }s, transform 0.5s cubic-bezier(.4,0,.2,1)`,
+                transform: isHovered ? `scale(${hoverScale})` : "scale(1)",
               }}
               onAnimationEnd={handleGridAnimationEnd}
             >
