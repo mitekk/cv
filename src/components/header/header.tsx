@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Dropdown } from "../UI/dropdown";
+import { LayoutContext } from "../../context";
 import { GAME_MODE_OPTIONS } from "../../constants";
 import type { GameMode } from "../../types";
 import "./header.css";
 
 export const Header: React.FC<{
-  gameMode: GameMode;
   onModeChange?: (mode: GameMode) => void;
   onReload?: () => void;
-}> = ({ gameMode, onModeChange = () => {}, onReload = () => {} }) => {
+}> = ({ onModeChange = () => {}, onReload = () => {} }) => {
   const [hovered, setHovered] = useState(false);
+  const { gameMode } = useContext(LayoutContext);
 
   return (
     <header
@@ -23,19 +24,6 @@ export const Header: React.FC<{
       <div
         className={`min-w-80 flex items-center h-full px-5 rounded-b-lg bg-gray-800 text-white transition-all duration-500 shadow-lg text-lg font-bold`}
       >
-        {/* <div
-          className={`
-            absolute
-            header-arrow flex-1 flex items-center justify-center text-yellow-300 text-2xl transition-opacity duration-500 ${
-              hovered ? "opacity-0" : "opacity-100"
-            }`}
-          style={{
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}
-        >
-          ▾
-        </div> */}
         <div
           className={`flex-1 flex items-center ${
             hovered ? "opacity-90" : "opacity-0"
@@ -52,7 +40,7 @@ export const Header: React.FC<{
             className="header-nav-text cursor-pointer px-4"
             onClick={onReload}
           >
-            ↺
+            {/* ↺ */}▶▶
           </div>
         </div>
       </div>

@@ -2,15 +2,12 @@ import { useState } from "react";
 
 export const Dropdown: React.FC<{
   title: string;
-  selected?: string;
+  selected: string;
   options: string[];
   onSelect: (option: string) => void;
   className?: string;
 }> = ({ title, selected, options, onSelect, className }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | undefined>(
-    selected
-  );
 
   return (
     <div className={`relative ${className || ""}`}>
@@ -33,10 +30,9 @@ export const Dropdown: React.FC<{
             <div key={option}>
               <div
                 className={`px-4 py-2 hover:bg-gray-600 cursor-pointer align-middle ${
-                  selectedOption === option ? "bg-gray-600" : ""
+                  selected === option ? "bg-gray-600" : ""
                 }`}
                 onClick={() => {
-                  setSelectedOption(option);
                   setDropdownOpen(false);
                   onSelect(option);
                 }}

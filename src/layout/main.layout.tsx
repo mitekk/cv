@@ -60,7 +60,6 @@ export function MainLayout({ children }: MainLayoutProps) {
     <LayoutContext.Provider value={{ dims, gridSize, gameMode: selectedMode }}>
       <main className="relative h-screen flex flex-col justify-center items-center bg-[#4c4b4c]">
         <Header
-          gameMode={selectedMode}
           onModeChange={setSelectedMode}
           onReload={() => {
             setReloadTrigger((prev) => prev + 1);

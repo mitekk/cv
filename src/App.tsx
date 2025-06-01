@@ -3,7 +3,6 @@ import { MainLayout } from "./layout/main.layout";
 import { IntroPage } from "./pages/intro/introPage";
 import { BuzzPage } from "./pages/theBuzz/buzzPage";
 import { NotFoundPage } from "./pages/notFound/notfoundPage";
-
 import "./App.css";
 
 function App() {
