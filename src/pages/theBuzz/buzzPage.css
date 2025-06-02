@@ -1,0 +1,20 @@
+ul {
+  max-height: 350px;
+}
+
+li {
+  list-style: none;
+  min-height: 60px;
+}
+
+.nav-link {
+  background: transparent;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #a9c9c2;
+  transition: color 150ms;
+}
+
+.nav-link:hover {
+  color: #c0d9d3;
+}

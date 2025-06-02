@@ -79,7 +79,7 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
   return shapes.length ? (
     <div
       ref={containerRef}
-      className="relative overflow-hidden filter brightness-110 saturate-150"
+      className="relative overflow-hidden filter brightness-90 saturate-125"
       style={{
         width: gridSize.width,
         height: gridSize.height,

@@ -1,9 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { MainLayout } from "./layout/main.layout";
-import { IntroPage } from "./pages/intro/introPage";
-import { BuzzPage } from "./pages/theBuzz/buzzPage";
-import { NotFoundPage } from "./pages/notFound/notfoundPage";
+
 import "./App.css";
+import {
+  BuzzPage,
+  Contact,
+  IntroPage,
+  Leadership,
+  NotFoundPage,
+  Projects,
+  Skills,
+} from "./pages";
 
 function App() {
   return (
@@ -11,7 +18,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<IntroPage />} />
-          <Route path="/theBuzz" element={<BuzzPage />} />
+          <Route path="/theBuzz" element={<BuzzPage />}>
+            <Route index element={<Skills />} />
+            <Route path="skills" element={<Skills />} />
+            <Route path="leadership" element={<Leadership />} />
+            <Route path="projects" element={<Projects />} />
+            <Route path="contact" element={<Contact />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

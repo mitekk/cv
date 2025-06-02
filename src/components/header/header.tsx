@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Dropdown } from "../UI/dropdown";
 import { PageContext } from "../../context";
 import { GAME_MODE_OPTIONS } from "../../constants";
@@ -9,41 +9,33 @@ export const Header: React.FC<{
   onModeChange?: (mode: GameMode) => void;
   onReload?: () => void;
 }> = ({ onModeChange = () => {}, onReload = () => {} }) => {
-  const [hovered, setHovered] = useState(false);
   const { gameMode } = useContext(PageContext);
 
   return (
     <header
-      className={`absolute top-0 left-3/8 z-[3] w-fit transition-all duration-500 ${
-        hovered ? "h-12 opacity-90" : "h-8 opacity-50"
-      } select-none`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onBlur={() => setHovered(false)}
+      className={`absolute top-0 left-3/8 z-[3] w-fit transition-all duration-500 h-12 opacity-90 select-none`}
     >
-      <div
-        className={`min-w-80 flex items-center h-full px-5 rounded-b-lg bg-gray-800 text-white transition-all duration-500 shadow-lg text-lg font-bold`}
-      >
+      {gameMode && (
         <div
-          className={`flex-1 flex items-center ${
-            hovered ? "opacity-90" : "opacity-0"
-          } duration-500`}
+          className={`min-w-80 flex items-center h-full px-5 rounded-b-lg bg-gray-800 text-white transition-all duration-500 shadow-lg text-lg font-bold`}
         >
-          <Dropdown
-            className="flex-1"
-            title={gameMode || ""}
-            selected={gameMode || ""}
-            options={GAME_MODE_OPTIONS}
-            onSelect={(option) => onModeChange(option as GameMode)}
-          />
-          <div
-            className="header-nav-text cursor-pointer px-4"
-            onClick={onReload}
-          >
-            {/* ↺ */}▶▶
+          <div className={`flex-1 flex items-center opacity-90`}>
+            <Dropdown
+              className="flex-1"
+              title={gameMode}
+              selected={gameMode}
+              options={GAME_MODE_OPTIONS}
+              onSelect={(option) => onModeChange(option as GameMode)}
+            />
+            <div
+              className="header-nav-text cursor-pointer px-4"
+              onClick={onReload}
+            >
+              ▶▶
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };

@@ -1,7 +1,6 @@
 import { type CSSProperties, type HTMLAttributes } from "react";
 import { COLORS, TILE_SIZE } from "../../constants";
 import type { ShapeKeyTetrominoes } from "../../types";
-import "./tetromino.tile.css";
 
 interface TetrominoTileProps extends HTMLAttributes<HTMLDivElement> {
   shape: ShapeKeyTetrominoes;
