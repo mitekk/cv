@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Prompter } from "../../components/prompter/prompter";
@@ -14,17 +14,43 @@ import {
   TetrominoesGrid,
 } from "../../components/grid";
 import "./introPage.css";
+import { Header } from "../../components/header/header";
+import { GAME_MODE_OPTIONS } from "../../constants";
+import { PageContext } from "../../context";
+import type { GameMode } from "../../types";
 
 export const IntroPage: React.FC = () => {
   const navigate = useNavigate();
   const [dropFinished, setDropFinished] = useState(false);
   const [promptFinished, setPromptFinished] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
-  const { dims, gameMode } = useContext(LayoutContext);
+  const { dims } = useContext(LayoutContext);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
+  const [selectedMode, setSelectedMode] = useState<GameMode>(
+    GAME_MODE_OPTIONS[0]
+  );
+
+  useEffect(() => {
+    if (reloadTrigger > 0) {
+      setSelectedMode(
+        GAME_MODE_OPTIONS[reloadTrigger % GAME_MODE_OPTIONS.length]
+      );
+    }
+  }, [reloadTrigger]);
 
   return (
-    <>
-      {gameMode === "Road Trip" && (
+    <PageContext.Provider
+      value={{
+        gameMode: selectedMode,
+      }}
+    >
+      <Header
+        onModeChange={setSelectedMode}
+        onReload={() => {
+          setReloadTrigger((prev) => prev + 1);
+        }}
+      />
+      {selectedMode === "Road Trip" && (
         <RoadTripGrid
           onAnimationStart={() => {
             setDropFinished(false);
@@ -37,7 +63,7 @@ export const IntroPage: React.FC = () => {
         />
       )}
 
-      {gameMode === "Tetris" && (
+      {selectedMode === "Tetris" && (
         <TetrominoesGrid
           onAnimationStart={() => {
             setDropFinished(false);
@@ -50,7 +76,7 @@ export const IntroPage: React.FC = () => {
         />
       )}
 
-      {gameMode === "Game of Life" && (
+      {selectedMode === "Game of Life" && (
         <GameOfLifeGrid
           onAnimationStart={() => {
             setDropFinished(false);
@@ -99,7 +125,9 @@ export const IntroPage: React.FC = () => {
                         () => {
                           navigate("/theBuzz");
                         },
-                        gameMode === "Tetris" ? dims.cols * dims.cols * 2 : 500
+                        selectedMode === "Tetris"
+                          ? dims.cols * dims.cols * 2
+                          : 500
                       );
                     }}
                   />
@@ -109,6 +137,6 @@ export const IntroPage: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+    </PageContext.Provider>
   );
 };

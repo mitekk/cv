@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Dropdown } from "../UI/dropdown";
-import { LayoutContext } from "../../context";
+import { PageContext } from "../../context";
 import { GAME_MODE_OPTIONS } from "../../constants";
 import type { GameMode } from "../../types";
 import "./header.css";
@@ -10,11 +10,11 @@ export const Header: React.FC<{
   onReload?: () => void;
 }> = ({ onModeChange = () => {}, onReload = () => {} }) => {
   const [hovered, setHovered] = useState(false);
-  const { gameMode } = useContext(LayoutContext);
+  const { gameMode } = useContext(PageContext);
 
   return (
     <header
-      className={`absolute top-0 left-auto z-[3] w-fit transition-all duration-500 ${
+      className={`absolute top-0 left-3/8 z-[3] w-fit transition-all duration-500 ${
         hovered ? "h-12 opacity-90" : "h-8 opacity-50"
       } select-none`}
       onMouseEnter={() => setHovered(true)}
@@ -31,8 +31,8 @@ export const Header: React.FC<{
         >
           <Dropdown
             className="flex-1"
-            title={gameMode}
-            selected={gameMode}
+            title={gameMode || ""}
+            selected={gameMode || ""}
             options={GAME_MODE_OPTIONS}
             onSelect={(option) => onModeChange(option as GameMode)}
           />

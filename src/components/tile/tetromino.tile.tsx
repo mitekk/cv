@@ -1,7 +1,6 @@
-import { useContext, type CSSProperties, type HTMLAttributes } from "react";
-import { COLORS, SOFT_RICH_COLORS, TILE_SIZE } from "../../constants";
+import { type CSSProperties, type HTMLAttributes } from "react";
+import { COLORS, TILE_SIZE } from "../../constants";
 import type { ShapeKeyTetrominoes } from "../../types";
-import { PageContext } from "../../context";
 import "./tetromino.tile.css";
 
 interface TetrominoTileProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,9 +8,6 @@ interface TetrominoTileProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const TetrominoTile = ({ style, shape }: TetrominoTileProps) => {
-  const { excitementLevel } = useContext(PageContext);
-  const colors = excitementLevel === "high" ? COLORS : SOFT_RICH_COLORS;
-
   const tileStyle: CSSProperties = {
     width: TILE_SIZE,
     height: TILE_SIZE,
@@ -20,7 +16,7 @@ export const TetrominoTile = ({ style, shape }: TetrominoTileProps) => {
       linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0)) no-repeat left / 10px 100%,
       linear-gradient(to left, rgba(0,0,0,0.10), rgba(0,0,0,0)) no-repeat bottom / 100% 10px,
       linear-gradient(to top, rgba(0,0,0,0.10), rgba(0,0,0,0)) no-repeat right / 10px 100%,
-    ${colors[shape]}
+    ${COLORS[shape]}
   `,
     position: "absolute",
     borderRadius: 3,
