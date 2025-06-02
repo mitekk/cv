@@ -8,7 +8,7 @@ export interface TemplatePlacement {
 }
 export type Template = TemplatePlacement[];
 
-export type ShapeKeyGameOfLife = "dead" | "alive";
+export type ShapeKeyGameOfLife = "dead" | "alive" | "empty";
 export type ShapeKeyTetrominoes = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
 export type ShapeKeyPath =
   | "empty"

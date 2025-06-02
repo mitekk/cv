@@ -61,19 +61,18 @@ export const RoadCar: React.FC<RoadCarProps> = ({
       transform={`
     translate(${carPos.x},${carPos.y})
     rotate(${carPos.angle})
-    translate(-16,8)
   `}
     >
       <text
         x={0}
-        y={0}
+        y={5}
         fontSize={32}
         dominantBaseline="ideographic"
         textAnchor="middle"
         transform="scale(-1,1)"
         style={{
           userSelect: "none",
-          filter: "drop-shadow(0px 2px 6px #0008)",
+          filter: "drop-shadow(0px 2px 6px #000)",
           pointerEvents: "auto",
         }}
       >

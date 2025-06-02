@@ -49,7 +49,7 @@ export const GameOfLifeTile = ({ style, shape }: GameOfLifeTileProps) => {
             animation: "fadeIn 1s forwards",
           }}
         >
-          🪦
+          🥚
         </span>
       )}
     </div>

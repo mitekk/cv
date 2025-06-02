@@ -95,9 +95,12 @@ export const IntroPage: React.FC = () => {
                     title="Get to know me"
                     onClick={() => {
                       setIntroFinished(true);
-                      setTimeout(() => {
-                        navigate("/theBuzz");
-                      }, dims.cols * dims.cols * 2);
+                      setTimeout(
+                        () => {
+                          navigate("/theBuzz");
+                        },
+                        gameMode === "Tetris" ? dims.cols * dims.cols * 2 : 500
+                      );
                     }}
                   />
                 </div>

@@ -17,12 +17,20 @@ interface GameOfLifeGridProps {
 }
 
 export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
-  onAnimationFinish,
+  removeTiles,
+  onAnimationFinish = () => {},
 }) => {
   const { dims, gridSize } = useContext(LayoutContext);
   const [grid, setGrid] = useState<Grid<ShapeKeyGameOfLife>>(() =>
     generateGameOfLifeGrid({ rows: dims.rows, cols: dims.cols })
   );
+  const [animated, setAnimated] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const shapes = useMemo<Shape<ShapeKeyGameOfLife>[]>(() => {
+    return generateGameOfLifeShapes(grid);
+  }, [grid]);
 
   useEffect(() => {
     if (dims.cols === 0 || dims.rows === 0) return;
@@ -39,32 +47,39 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
     if (!grid) return;
 
     const interval = setInterval(() => {
+      if (removeTiles) return;
       setGrid((g) => createNextGenerationGrid(g));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [grid]);
+  }, [grid, removeTiles]);
 
-  const shapes = useMemo<Shape<ShapeKeyGameOfLife>[]>(() => {
-    return generateGameOfLifeShapes(grid);
-  }, [grid]);
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const relativeX = e.clientX - rect.left;
+      const relativeY = e.clientY - rect.top;
+      setMouse({ x: relativeX, y: relativeY });
+    };
 
-  const animationEndTimeout = useRef<number | null>(null);
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
 
-  const handleAnimationEnd = () => {
-    if (animationEndTimeout.current) {
-      clearTimeout(animationEndTimeout.current);
-    }
-    animationEndTimeout.current = setTimeout(() => {
-      if (onAnimationFinish) {
-        onAnimationFinish();
-      }
-    }, 150);
-  };
+  useEffect(() => {
+    setAnimated(false);
+    const timeout = setTimeout(() => {
+      setAnimated(true);
+      onAnimationFinish();
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [shapes, onAnimationFinish]);
 
   return shapes.length ? (
     <div
-      className="relative overflow-hidden"
+      ref={containerRef}
+      className="relative overflow-hidden filter brightness-110 saturate-150"
       style={{
         width: gridSize.width,
         height: gridSize.height,
@@ -74,6 +89,24 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
         const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
         const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
 
+        const centerX = finalLeft + TILE_SIZE / 2;
+        const centerY = finalTop + TILE_SIZE / 2;
+        const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
+        const isHovered = dist < TILE_SIZE / 2;
+
+        if (isHovered && shape.key !== "alive") {
+          shape.key = "alive";
+          setTimeout(() => {
+            setGrid((g) => {
+              g[shape.points[0].x][shape.points[0].y] = {
+                id: shape.id,
+                shape: "alive",
+              };
+              return g;
+            });
+          }, 0);
+        }
+
         return (
           <TiledShape
             key={`${shape.id}-${idx}`}
@@ -81,7 +114,10 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
             top={finalTop}
             left={finalLeft}
             className={`shape-group`}
-            onAnimationEnd={handleAnimationEnd}
+            styles={{
+              opacity: removeTiles ? 0 : animated ? 1 : 0,
+              transition: `opacity .75s ease-in-out`,
+            }}
           >
             {shape.points.map(({ x, y }) => (
               <GameOfLifeTile
@@ -90,6 +126,7 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
                 style={{
                   left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
                   top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                  backgroundColor: isHovered ? "#ff6a896b" : "#b6d9bb",
                 }}
               />
             ))}

@@ -25,7 +25,7 @@ export const Dropdown: React.FC<{
         {title} <span>▾</span>
       </button>
       {dropdownOpen && (
-        <div className="absolute left-0 w-30 bg-gray-700 rounded shadow-lg z-3">
+        <div className="absolute left-0 w-40 bg-gray-700 rounded shadow-lg z-3">
           {options.map((option) => (
             <div key={option}>
               <div
