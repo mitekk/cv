@@ -13,6 +13,7 @@ li {
   font-weight: 800;
   color: #a9c9c2;
   transition: color 150ms;
+  user-select: none;
 }
 
 .nav-link:hover {
