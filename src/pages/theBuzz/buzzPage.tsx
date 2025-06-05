@@ -1,42 +1,24 @@
-import { Link, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import { WavesGrid } from "../../components/grid";
 import { PageContext } from "../../context";
 import "./buzzPage.css";
+import { Navbar } from "../../components/navbar/navbar";
 
 export const BuzzPage: React.FC = () => {
+  const [gridLoaded, setGridLoaded] = useState(false);
   return (
     <PageContext.Provider value={{}}>
       <div>
-        <WavesGrid onAnimationFinish={() => {}} />
-        <div className="absolute top-0 left-0 w-full h-full flex items-center">
-          <div className="flex min-w-fit h-full items-center bg-zinc-700">
-            <ul className="flex px-10 min-w-fit h-full flex-col justify-evenly ">
-              <li>
-                <Link to="skills" className="nav-link">
-                  skills
-                </Link>
-              </li>
-              <li>
-                <Link to="leadership" className="nav-link">
-                  leadership
-                </Link>
-              </li>
-              <li>
-                <Link to="projects" className="nav-link">
-                  projects
-                </Link>
-              </li>
-              <li>
-                <Link to="contact" className="nav-link">
-                  contact
-                </Link>
-              </li>
-            </ul>
+        <WavesGrid onAnimationFinish={() => setGridLoaded(true)} />
+        {gridLoaded && (
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <Navbar />
+            <div className="flex-1">
+              <Outlet />
+            </div>
           </div>
-          <div className="flex-1">
-            <Outlet />
-          </div>
-        </div>
+        )}
       </div>
     </PageContext.Provider>
   );

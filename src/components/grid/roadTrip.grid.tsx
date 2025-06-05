@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { LayoutContext, PageContext } from "../../context";
+import { LayoutContext } from "../../context";
 import { generatePath, generateShapes, getPathData } from "../../services/grid";
 import { TiledShape } from "../shape/shape";
 import { RoadTripTile } from "../tile";
@@ -20,7 +20,6 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
 }) => {
   const animationEndTimeout = useRef<number | null>(null);
   const { dims, gridSize } = useContext(LayoutContext);
-  const { excitementLevel } = useContext(PageContext);
   const [animated, setAnimated] = useState(false);
   const [gridAnimationFinished, setGridAnimationFinished] = useState(false);
 
@@ -105,9 +104,8 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
           const centerX = finalLeft + TILE_SIZE;
           const centerY = finalTop + TILE_SIZE;
           const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
-          const isHovered =
-            dist < (excitementLevel === "high" ? TILE_SIZE * 4 : TILE_SIZE * 0);
-          const hoverScale = excitementLevel === "high" ? 0.95 : 1.0;
+          const isHovered = dist < TILE_SIZE * 4;
+          const hoverScale = 0.95;
 
           return (
             <TiledShape

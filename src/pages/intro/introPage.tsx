@@ -100,7 +100,7 @@ export const IntroPage: React.FC = () => {
               <div className="flex flex-col h-full avatar-animate-in">
                 <Avatar
                   src={avatarImg}
-                  className="flex items-center flex-1 saturate-100"
+                  className="flex items-center flex-1 saturate-100 w-75 h-75"
                 />
                 <div className="min-h-24"></div>
               </div>

@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useLayoutEffect, useMemo } from "react";
 import { LayoutContext } from "../../context/layout";
 import { TiledShape } from "../shape/shape";
 import { WaveTile } from "../tile";
@@ -10,7 +10,9 @@ interface WavesProps {
   onAnimationFinish?: () => void;
 }
 
-export const WavesGrid: React.FC<WavesProps> = () => {
+export const WavesGrid: React.FC<WavesProps> = ({
+  onAnimationFinish = () => {},
+}) => {
   const { dims, gridSize } = useContext(LayoutContext);
 
   const shapes = useMemo<Shape<ShapeKeyWave>[]>(() => {
@@ -21,6 +23,10 @@ export const WavesGrid: React.FC<WavesProps> = () => {
       cols: dims.cols,
     });
   }, [dims.rows, dims.cols]);
+
+  useLayoutEffect(() => {
+    if (shapes.length > 0) onAnimationFinish();
+  }, [shapes, onAnimationFinish]);
 
   return shapes.length ? (
     <div
