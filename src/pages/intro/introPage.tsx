@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Prompter } from "../../components/prompter/prompter";
 import { PromptLines } from "../../assets/prompts";
 import { Avatar, Button } from "../../components/UI";
-// import avatarImg from "../../assets/avatar.png";
-// import avatarImg from "../../assets/mitya.jpg";
-import avatarImg from "../../assets/mitya2.png";
+import avatarImg from "../../assets/profile/avatar.png";
 import { LayoutContext } from "../../context/layout";
 import {
   GameOfLifeGrid,

@@ -1,0 +1,13 @@
+export { default as reactIcon } from "./react.svg";
+export { default as vueIcon } from "./vue.svg";
+export { default as nodeIcon } from "./node.svg";
+export { default as awsIcon } from "./aws.svg";
+export { default as mongoIcon } from "./mongo.svg";
+export { default as mysqlIcon } from "./mysql.svg";
+export { default as terraformIcon } from "./terraform.svg";
+export { default as restIcon } from "./rest-api.svg";
+export { default as graphqlIcon } from "./graphql.svg";
+export { default as serverlessIcon } from "./serverless.svg";
+export { default as jestIcon } from "./jest.svg";
+export { default as githubIcon } from "./github.svg";
+export { default as cdkIcon } from "./cdk.svg";

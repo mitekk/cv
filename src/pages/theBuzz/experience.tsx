@@ -22,7 +22,7 @@ export const Experience: React.FC = () => {
       position: "Fullstack Team Lead",
       duration: "2018-2023",
       technologies: ["GCP", "AWS", "CDK", "React", "Node.js", "mySQL"],
-      description: `At Daytwo, I started by leading both in-house and offshore developers with a focus on client-side projects, delivering tailored solutions and maintaining close collaboration with clients to meet their needs. As the company evolved, my role shifted to breaking down a monolith into microservices and strengthening backend capabilities, including major integrations with leading healthcare and insurance providers in Israel and the US. Throughout, I aimed to shield my team from distractions, keeping us focused on our goals, while fostering a culture of transparency and appreciation.`,
+      description: `At Daytwo, I started by leading both in-house and offshore developers with a focus on client-side projects, delivering tailored solutions and maintaining close collaboration with clients to meet their needs. As the company evolved, my role shifted to breaking down a monolith into microservices and strengthening backend capabilities, including major integrations with leading healthcare and insurance providers in Israel and the US. Throughout, I aimed to keep us focused on our goals, while fostering a culture of transparency and appreciation.`,
     },
     {
       company: "Softwave",
@@ -35,7 +35,15 @@ export const Experience: React.FC = () => {
       company: "Eternity",
       position: "Fullstack Dev",
       duration: "2015-2016",
-      technologies: ["Azure", "Angular.js", "C#", "SQL"],
+      technologies: [
+        "Azure",
+        "Javascript",
+        "HTML",
+        "CSS",
+        "ASP.Net",
+        "C#",
+        "SQL",
+      ],
       description: `At Eternity, I was introduced to cloud technologies, gaining my first hands-on experience with Azure and developing scalable web applications.`,
     },
     {
@@ -57,7 +65,7 @@ export const Experience: React.FC = () => {
   return (
     <SectionLayout>
       <div style={{ color: "#333332" }} className="flex flex-col h-full gap-5">
-        {experience.map((exp) => (
+        {experience.map((exp, index) => (
           <div key={exp.company}>
             <div className="gap-1">
               <div className="text-xl font-bold">
@@ -70,7 +78,13 @@ export const Experience: React.FC = () => {
                 <div key={tech}>{tech}</div>
               ))}
             </div>
-            <div className="text-base mt-2">{exp.description}</div>
+            <div
+              className={`text-base mt-2 ${
+                index === experience.length - 1 ? "mb-12" : ""
+              }`}
+            >
+              {exp.description}
+            </div>
           </div>
         ))}
       </div>

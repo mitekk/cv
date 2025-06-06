@@ -3,7 +3,7 @@ import { SectionLayout } from "../../layout/section.layout";
 export const About: React.FC = () => {
   return (
     <SectionLayout>
-      <div style={{ color: "#333332" }} className="p-10">
+      <div style={{ color: "#333332" }}>
         <div className="mb-4 flex flex-col gap-5 text-lg">
           <p>
             I believe the most rewarding work happens when a team comes together

@@ -1,39 +1,42 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Avatar } from "../UI";
-import avatarImg from "../../assets/mitya2.png";
-import email from "./../../assets/email.svg";
-import github from "./../../assets/github.svg";
-import linkedin from "./../../assets/linkedin.svg";
+import avatarImg from "../../assets/profile/avatar.png";
+import {
+  cvIcon,
+  emailIcon,
+  githubIcon,
+  linkedinIcon,
+} from "../../assets/links";
 
 const emailUrl = "mitekk@gmail.com";
 const linkedinUrl = "https://www.linkedin.com/in/mitya-kurs-8b058452/";
 const githubUrl = "https://github.com/mitekk";
 
-const sections = ["about", "skills", "experience"];
+const sections = ["about", "experience", "toolbox"];
 const links = [
   {
     action: () =>
       (window.location.href = `mailto:${emailUrl}?subject=Hi%20Mitya&body=How%20are%20you%3F`),
-    imgSrc: email,
+    imgSrc: emailIcon,
     alt: "email",
     title: emailUrl,
   },
   {
     action: () => window.open(linkedinUrl, "_blank"),
-    imgSrc: linkedin,
+    imgSrc: linkedinIcon,
     alt: "linkedin",
     title: "linkedin",
   },
   {
     action: () => window.open(githubUrl, "_blank"),
-    imgSrc: github,
+    imgSrc: githubIcon,
     alt: "github",
     title: "github",
   },
   {
     action: () => window.open(githubUrl, "_blank"),
-    imgSrc: github,
+    imgSrc: cvIcon,
     alt: "CV",
     title: "download CV",
   },
@@ -89,8 +92,13 @@ export const Navbar: React.FC = () => {
                 className="flex flex-row gap-2 cursor-pointer"
                 onClick={link.action}
               >
-                <div className="flex flex-row justify-center w-5">
-                  <img src={link.imgSrc} alt={link.alt} draggable={false} />
+                <div className="flex flex-row justify-center items-center w-5">
+                  <img
+                    className="w-5 h-5"
+                    src={link.imgSrc}
+                    alt={link.alt}
+                    draggable={false}
+                  />
                 </div>
                 <span>{link.title}</span>
               </div>

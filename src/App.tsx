@@ -8,7 +8,7 @@ import {
   About,
   Experience,
   NotFoundPage,
-  Skills,
+  Toolbox,
 } from "./pages";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
           <Route path="/theBuzz" element={<BuzzPage />}>
             <Route index element={<Navigate to="about" replace />} />
             <Route path="about" element={<About />} />
-            <Route path="skills" element={<Skills />} />
+            <Route path="toolbox" element={<Toolbox />} />
             <Route path="experience" element={<Experience />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
