@@ -127,7 +127,7 @@ export const IntroPage: React.FC = () => {
                         },
                         selectedMode === "Tetris"
                           ? dims.cols * dims.cols * 2
-                          : 500
+                          : 750
                       );
                     }}
                   />

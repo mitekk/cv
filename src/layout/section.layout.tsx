@@ -4,5 +4,5 @@ interface SectionLayoutProps {
   children: ReactNode;
 }
 export const SectionLayout: React.FC<SectionLayoutProps> = ({ children }) => {
-  return <section className="p-12">{children}</section>;
+  return <section className="h-full p-12 overflow-auto">{children}</section>;
 };
