@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { WavesGrid } from "../../components/grid";
 import { PageContext } from "../../context";
@@ -6,14 +6,32 @@ import { Navbar } from "../../components/navbar/navbar";
 
 export const BuzzPage: React.FC = () => {
   const [gridLoaded, setGridLoaded] = useState(false);
+  const [navbarVisible, setNavbarVisible] = useState(false);
+
+  useEffect(() => {
+    if (gridLoaded) {
+      setTimeout(() => setNavbarVisible(true), 10);
+    }
+  }, [gridLoaded]);
   return (
     <PageContext.Provider value={{}}>
       <>
-        <WavesGrid onAnimationFinish={() => setGridLoaded(true)} />
+        <WavesGrid
+          className="relative overflow-hidden filter animate-fadein"
+          onAnimationFinish={() => setGridLoaded(true)}
+        />
         {gridLoaded && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-            <Navbar />
-            <div className="flex-1 h-full">
+            <div
+              className={`h-full transition-all duration-700 ease-out ${
+                navbarVisible
+                  ? "translate-y-0 opacity-100"
+                  : "-translate-y-20 opacity-0"
+              }`}
+            >
+              <Navbar />
+            </div>
+            <div className="flex-1 h-full transition-opacity duration-700 opacity-0 animate-fadein">
               <Outlet />
             </div>
           </div>

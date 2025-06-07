@@ -7,11 +7,13 @@ import { TILE_GAP, TILE_SIZE } from "../../constants";
 import type { Shape, ShapeKeyWave } from "../../types";
 
 interface WavesProps {
+  className?: string;
   onAnimationFinish?: () => void;
 }
 
 export const WavesGrid: React.FC<WavesProps> = ({
   onAnimationFinish = () => {},
+  className,
 }) => {
   const { dims, gridSize } = useContext(LayoutContext);
 
@@ -30,7 +32,7 @@ export const WavesGrid: React.FC<WavesProps> = ({
 
   return shapes.length ? (
     <div
-      className="relative overflow-hidden filter"
+      className={className}
       style={{
         width: gridSize.width,
         height: gridSize.height,
