@@ -15,14 +15,14 @@ export const Experience: React.FC = () => {
         "Apollo",
         "MongoDB",
       ],
-      description: `At Clarity, I led the development and maintenance of the company’s core business logic, working hands-on across the full stack—from product and technical design to implementation and timeline assessments. Over two years, I helped build a strong, versatile team through technical interviews and onboarding, fostering open communication and a positive team spirit. My work focused on delivering new product features, while also improving data structures, enhancing server-client efficiency, and upgrading backoffice capabilities to help onboard new clients and create a faster, more responsive user experience.`,
+      description: `At Clarity, I led the development and maintenance of the company’s core business logic, working hands-on across the full stack—from product and technical design to implementation and timeline assessments. Over two years, I helped build a strong, versatile team through technical interviews and onboarding, fostering open communication and a positive team spirit. My work focused on delivering new product features, while also improving data structures, enhancing server-client efficiency, and strengthening our monitoring capabilities.`,
     },
     {
       company: "Daytwo",
       position: "Fullstack Team Lead",
       duration: "2018-2023",
       technologies: ["GCP", "AWS", "CDK", "React", "Node.js", "mySQL"],
-      description: `At Daytwo, I started by leading both in-house and offshore developers with a focus on client-side projects, delivering tailored solutions and maintaining close collaboration with clients to meet their needs. As the company evolved, my role shifted to breaking down a monolith into microservices and strengthening backend capabilities, including major integrations with leading healthcare and insurance providers in Israel and the US. Throughout, I aimed to keep us focused on our goals, while fostering a culture of transparency and appreciation.`,
+      description: `At Daytwo, I started by leading both in-house and offshore developers with a focus on client-side projects, delivering tailored solutions and maintaining close collaboration with clients to meet their needs. As the company evolved, my role shifted to breaking down a monolith into microservices and strengthening backend capabilities, including major integrations with leading healthcare and insurance providers in Israel and the US.`,
     },
     {
       company: "Softwave",
@@ -73,13 +73,13 @@ export const Experience: React.FC = () => {
               </div>
               <div className="text-lg">{exp.duration}</div>
             </div>
-            <div className="flex text-lg gap-2">
+            <div className="flex text-lg font-medium gap-2">
               {exp.technologies.map((tech) => (
                 <div key={tech}>{tech}</div>
               ))}
             </div>
             <div
-              className={`text-base mt-2 ${
+              className={`text-justify font-light mt-2 ${
                 index === experience.length - 1 ? "mb-12" : ""
               }`}
             >

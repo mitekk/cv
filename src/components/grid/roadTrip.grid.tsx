@@ -96,9 +96,9 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
 
           let top;
           if (!removeTiles) {
-            top = animated ? finalTop : -dims.cols * TILE_SIZE * 2;
+            top = animated ? finalTop : -TILE_SIZE;
           } else {
-            top = animated ? finalTop + dims.cols * TILE_SIZE * 2 : finalTop;
+            top = animated ? finalTop + dims.cols * TILE_SIZE : finalTop;
           }
 
           const centerX = finalLeft + TILE_SIZE;

@@ -64,7 +64,7 @@ export const Toolbox: React.FC = () => {
         style={{ color: "#333332" }}
         className="flex flex-row flex-wrap basis-4xl gap-4 h-full"
       >
-        {skills.map((skill, index) => (
+        {skills.map((skill) => (
           <div
             key={skill.title}
             className="flex flex-col items-center mb-4 gap-5"
@@ -74,9 +74,7 @@ export const Toolbox: React.FC = () => {
               {skill.technologies.map((tech) => (
                 <div
                   key={tech.name}
-                  className={`w-25 flex flex-col items-center gap-1 border border-zinc-300 bg-white/40 rounded-lg p-3 transition-shadow hover:shadow-lg hover:saturate-175 ${
-                    index === skills.length - 1 ? "mb-12" : ""
-                  }`}
+                  className={`w-25 flex flex-col items-center gap-1 border border-zinc-300 bg-white/40 rounded-lg p-3 transition-shadow hover:shadow-lg hover:saturate-175 hover:scale-105`}
                 >
                   <img
                     src={tech.icon}
