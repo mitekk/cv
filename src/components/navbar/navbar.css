@@ -10,10 +10,6 @@ ul {
   border-radius: 5px;
 }
 
-.nav-link.active {
-  color: #ff0000;
-}
-
 .nav-link:hover {
   color: #bababa;
 }

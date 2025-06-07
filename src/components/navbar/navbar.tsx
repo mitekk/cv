@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Avatar } from "../UI";
 import avatarImg from "../../assets/profile/avatar.png";
 import {
@@ -8,6 +8,7 @@ import {
   githubIcon,
   linkedinIcon,
 } from "../../assets/links";
+import "./navbar.css";
 
 const emailUrl = "mitekk@gmail.com";
 const linkedinUrl = "https://www.linkedin.com/in/mitya-kurs-8b058452/";
@@ -45,10 +46,29 @@ const links = [
 export const Navbar: React.FC = () => {
   const { pathname } = useLocation();
   const [activeLink, setActiveLink] = useState<string>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setActiveLink(pathname.split("/")[2]);
   }, [pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!activeLink) return;
+      const currentIndex = sections.indexOf(activeLink);
+      if (e.key === "ArrowDown") {
+        const nextIndex = (currentIndex + 1) % sections.length;
+        navigate(sections[nextIndex]);
+      }
+      if (e.key === "ArrowUp") {
+        const prevIndex =
+          (currentIndex - 1 + sections.length) % sections.length;
+        navigate(sections[prevIndex]);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeLink, navigate]);
 
   return (
     <nav className="relative flex justify-center items-center w-80 h-full ">
@@ -67,7 +87,7 @@ export const Navbar: React.FC = () => {
               <span>Fullstack developer</span>
             </div>
           </div>
-          <div className="flex-1  py-2">
+          <div className="flex-1 py-2">
             <ul className="nav-links flex flex-col h-full min-w-fit justify-around">
               {sections.map((section) => (
                 <li key={section}>
@@ -89,7 +109,7 @@ export const Navbar: React.FC = () => {
             {links.map((link) => (
               <div
                 key={link.alt}
-                className="flex flex-row gap-2 cursor-pointer"
+                className="flex flex-row gap-2 cursor-pointer hover:text-[#bababa] transition-colors"
                 onClick={link.action}
               >
                 <div className="flex flex-row justify-center items-center w-5">

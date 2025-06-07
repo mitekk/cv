@@ -11,11 +11,11 @@ import {
   RoadTripGrid,
   TetrominoesGrid,
 } from "../../components/grid";
-import "./introPage.css";
 import { Header } from "../../components/header/header";
 import { GAME_MODE_OPTIONS } from "../../constants";
 import { PageContext } from "../../context";
 import type { GameMode } from "../../types";
+import "./introPage.css";
 
 export const IntroPage: React.FC = () => {
   const navigate = useNavigate();

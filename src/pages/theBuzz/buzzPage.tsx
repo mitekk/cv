@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import { WavesGrid } from "../../components/grid";
 import { PageContext } from "../../context";
 import { Navbar } from "../../components/navbar/navbar";
-import "./buzzPage.css";
 
 export const BuzzPage: React.FC = () => {
   const [gridLoaded, setGridLoaded] = useState(false);

@@ -6,6 +6,11 @@ export const About: React.FC = () => {
       <div style={{ color: "#333332" }}>
         <div className="mb-4 flex flex-col gap-5 text-lg">
           <p>
+            <b>TL;DR:</b> I’m a collaborative fullstack developer and team
+            leader who’s passionate about building trust, supporting teams, and
+            delivering high-quality solutions.
+          </p>
+          <p>
             I believe the most rewarding work happens when a team comes together
             around a shared purpose. I’ve found that teams who encourage each
             other, share knowledge, and enjoy working side by side create an
