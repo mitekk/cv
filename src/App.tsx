@@ -1,7 +1,12 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { MainLayout } from "./layout/main.layout";
-
-import "./App.css";
 import {
   BuzzPage,
   IntroPage,
@@ -10,8 +15,19 @@ import {
   NotFoundPage,
   Toolbox,
 } from "./pages";
+import "./App.css";
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const redirect = sessionStorage.redirect;
+    if (redirect) {
+      sessionStorage.removeItem("redirect");
+      navigate(redirect, { replace: true });
+    }
+  }, [navigate]);
+
   return (
     <MainLayout>
       <BrowserRouter>
