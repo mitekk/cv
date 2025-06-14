@@ -1,14 +1,14 @@
 {
   "version": "1.0.0",
-  "name": "mitya-kurs-cv",
+  "name": "mitya-kurs-portfolio",
   "author": {
     "name": "Mitya Kurs",
     "email": "mitekk@gmail.com"
   },
-  "homepage": "https://mitekk.github.io/cv/",
+  "homepage": "https://mitekk.github.io/portfolio/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mitekk/cv.git"
+    "url": "https://github.com/mitekk/portfolio.git"
   },
   "private": true,
   "type": "module",

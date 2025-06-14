@@ -15,8 +15,8 @@ function App() {
     <MainLayout>
       <BrowserRouter>
         <Routes>
-          <Route path="/cv" element={<IntroPage />} />
-          <Route path="/cv/theBuzz" element={<BuzzPage />}>
+          <Route path="/portfolio" element={<IntroPage />} />
+          <Route path="/portfolio/theBuzz" element={<BuzzPage />}>
             <Route index element={<Navigate to="about" replace />} />
             <Route path="about" element={<About />} />
             <Route path="toolbox" element={<Toolbox />} />

@@ -98,7 +98,7 @@ export const IntroPage: React.FC = () => {
                       setIntroFinished(true);
                       setTimeout(
                         () => {
-                          navigate("/cv/theBuzz");
+                          navigate("/portfolio/theBuzz");
                         },
                         selectedMode === "Tetris"
                           ? dims.cols * dims.cols * 2

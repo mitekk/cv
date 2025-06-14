@@ -36,7 +36,7 @@ const links = [
     title: "github",
   },
   {
-    action: () => window.open("/Mitya_Kurs.pdf", "_blank"),
+    action: () => window.open("/portfolio/Mitya_Kurs.pdf", "_blank"),
     imgSrc: cvIcon,
     alt: "CV",
     title: "download CV",

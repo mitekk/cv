@@ -14,7 +14,7 @@ export const NotFoundPage: React.FC = () => {
         <br />
         Maybe you followed a broken link or mistyped the address.
       </p>
-      <Button title="Home" onClick={() => navigate("/cv")} />
+      <Button title="Home" onClick={() => navigate("/portfolio")} />
     </div>
   );
 };
