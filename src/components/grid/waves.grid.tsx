@@ -3,7 +3,7 @@ import { LayoutContext } from "../../context/layout";
 import { TiledShape } from "../shape/shape";
 import { WaveTile } from "../tile";
 import { generateWavesShapes } from "../../services/grid/wave";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
+import { TILE_GAP } from "../../constants";
 import type { Shape, ShapeKeyWave } from "../../types";
 
 interface WavesProps {
@@ -15,7 +15,7 @@ export const WavesGrid: React.FC<WavesProps> = ({
   onAnimationFinish = () => {},
   className,
 }) => {
-  const { dims, gridSize } = useContext(LayoutContext);
+  const { dims, gridSize, tileSize } = useContext(LayoutContext);
 
   const shapes = useMemo<Shape<ShapeKeyWave>[]>(() => {
     if (dims.cols === 0 || dims.rows === 0) return [];
@@ -30,7 +30,7 @@ export const WavesGrid: React.FC<WavesProps> = ({
     if (shapes.length > 0) onAnimationFinish();
   }, [shapes, onAnimationFinish]);
 
-  return shapes.length ? (
+  return shapes.length && gridSize ? (
     <div
       className={className}
       style={{
@@ -40,8 +40,8 @@ export const WavesGrid: React.FC<WavesProps> = ({
       }}
     >
       {shapes.map((shape, idx) => {
-        const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
-        const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
+        const finalTop = shape.points[0].x * (tileSize + TILE_GAP);
+        const finalLeft = shape.points[0].y * (tileSize + TILE_GAP);
 
         return (
           <TiledShape

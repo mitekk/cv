@@ -1,5 +1,5 @@
-import { type CSSProperties, type HTMLAttributes } from "react";
-import { TILE_SIZE } from "../../constants";
+import { useContext, type CSSProperties, type HTMLAttributes } from "react";
+import { LayoutContext } from "../../context";
 import type { ShapeKeyPath } from "../../types";
 
 interface RoadTripTileProps extends HTMLAttributes<HTMLDivElement> {
@@ -8,9 +8,11 @@ interface RoadTripTileProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const RoadTripTile = ({ style, shape }: RoadTripTileProps) => {
+  const { tileSize } = useContext(LayoutContext);
+
   const tileStyle: CSSProperties = {
-    width: TILE_SIZE,
-    height: TILE_SIZE,
+    width: tileSize,
+    height: tileSize,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

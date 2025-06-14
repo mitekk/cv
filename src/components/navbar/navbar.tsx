@@ -36,7 +36,7 @@ const links = [
     title: "github",
   },
   {
-    action: () => window.open(githubUrl, "_blank"),
+    action: () => window.open("/Mitya_Kurs.pdf", "_blank"),
     imgSrc: cvIcon,
     alt: "CV",
     title: "download CV",
@@ -71,59 +71,57 @@ export const Navbar: React.FC = () => {
   }, [activeLink, navigate]);
 
   return (
-    <nav className="relative flex justify-center items-center w-80 h-full ">
-      <div className="absolute inset-0 m-[20px] p-8 max-h-200 flex flex-col  bg-zinc-700 rounded-xl">
-        <div
-          className="flex flex-col justify-between h-full max-h-200"
-          style={{ userSelect: "none" }}
-        >
-          <div className="flex-1 py-2">
-            <Avatar
-              src={avatarImg}
-              className="flex items-center flex-1 saturate-100 h-25 w-25"
-            />
-            <div className="flex flex-col">
-              <span className="text-3xl">Mitya Kurs</span>
-              <span>Fullstack developer</span>
-            </div>
+    <nav className="flex justify-center items-center w-80 h-full p-8">
+      <div
+        className="flex flex-col justify-between w-full h-full bg-zinc-700 rounded-xl p-8"
+        style={{ userSelect: "none" }}
+      >
+        <div className="flex-5 py-2">
+          <Avatar
+            src={avatarImg}
+            className="flex items-center flex-1 saturate-100 h-25 w-25"
+          />
+          <div className="flex flex-col">
+            <span className="text-3xl">Mitya Kurs</span>
+            <span>Fullstack developer</span>
           </div>
-          <div className="flex-1 py-2">
-            <ul className="nav-links flex flex-col h-full min-w-fit justify-around">
-              {sections.map((section) => (
-                <li key={section}>
-                  <div className="flex flex-row items-center gap-2 cursor-pointer">
-                    <div className="flex flex-row justify-center w-5">
-                      {activeLink === section && (
-                        <div className="pt-1 text-xs">➜</div>
-                      )}
-                    </div>
-                    <Link to={section} className="nav-link">
-                      {section}
-                    </Link>
+        </div>
+        <div className="flex-4 py-2">
+          <ul className="nav-links flex flex-col h-full min-w-fit justify-around">
+            {sections.map((section) => (
+              <li key={section}>
+                <div className="flex flex-row items-center gap-2 cursor-pointer">
+                  <div className="flex flex-row justify-center w-5">
+                    {activeLink === section && (
+                      <div className="pt-1 text-xs">➜</div>
+                    )}
                   </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-1 flex-col justify-end h-full py-2 gap-1">
-            {links.map((link) => (
-              <div
-                key={link.alt}
-                className="flex flex-row gap-2 cursor-pointer hover:text-[#bababa] transition-colors"
-                onClick={link.action}
-              >
-                <div className="flex flex-row justify-center items-center w-5">
-                  <img
-                    className="w-5 h-5"
-                    src={link.imgSrc}
-                    alt={link.alt}
-                    draggable={false}
-                  />
+                  <Link to={section} className="nav-link">
+                    {section}
+                  </Link>
                 </div>
-                <span>{link.title}</span>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
+        <div className="flex flex-5 flex-col justify-end h-full py-2 gap-1">
+          {links.map((link) => (
+            <div
+              key={link.alt}
+              className="flex flex-row gap-2 cursor-pointer hover:text-[#bababa] transition-colors"
+              onClick={link.action}
+            >
+              <div className="flex flex-row justify-center items-center w-5">
+                <img
+                  className="w-5 h-5"
+                  src={link.imgSrc}
+                  alt={link.alt}
+                  draggable={false}
+                />
+              </div>
+              <span>{link.title}</span>
+            </div>
+          ))}
         </div>
       </div>
     </nav>

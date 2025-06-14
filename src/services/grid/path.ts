@@ -1,4 +1,4 @@
-import { TILE_GAP, TILE_SIZE } from "../../constants";
+import { TILE_GAP } from "../../constants";
 import type { Dims } from "../../context/layout";
 import type { Point, Shape, ShapeKeyPath } from "../../types";
 import { shuffleArray } from "../shuffle";
@@ -84,16 +84,16 @@ export const generateShapes = (
   return shapes;
 };
 
-function transformPoint(point: Point) {
-  const x = point.x * (TILE_SIZE + TILE_GAP) + TILE_SIZE / 2;
-  const y = point.y * (TILE_SIZE + TILE_GAP) + TILE_SIZE / 2;
+function transformPoint(point: Point, tileSize: number) {
+  const x = point.x * (tileSize + TILE_GAP) + tileSize / 2;
+  const y = point.y * (tileSize + TILE_GAP) + tileSize / 2;
   return { px: y, py: x };
 }
 
-export const getPathData = (pathPoints: Point[]) => {
+export const getPathData = (pathPoints: Point[], tileSize: number) => {
   if (pathPoints.length < 2) return "";
 
-  const points = pathPoints.map((p) => transformPoint(p));
+  const points = pathPoints.map((p) => transformPoint(p, tileSize));
 
   let d = `M ${points[0].px},${points[0].py}`;
   for (let i = 0; i < points.length - 1; i++) {

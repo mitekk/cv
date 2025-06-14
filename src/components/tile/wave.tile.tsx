@@ -1,5 +1,5 @@
-import { type CSSProperties, type HTMLAttributes } from "react";
-import { TILE_SIZE } from "../../constants";
+import { useContext, type CSSProperties, type HTMLAttributes } from "react";
+import { LayoutContext } from "../../context";
 
 interface WaveTileProps extends HTMLAttributes<HTMLDivElement> {
   style?: CSSProperties;
@@ -7,9 +7,11 @@ interface WaveTileProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const WaveTile = ({ style, className }: WaveTileProps) => {
+  const { tileSize } = useContext(LayoutContext);
+
   const tileStyle: CSSProperties = {
-    width: TILE_SIZE,
-    height: TILE_SIZE,
+    width: tileSize,
+    height: tileSize,
     position: "absolute",
     borderRadius: 3,
     ...style,

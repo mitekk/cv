@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Prompter } from "../../components/prompter/prompter";
@@ -6,11 +6,7 @@ import { PromptLines } from "../../assets/prompts";
 import { Avatar, Button } from "../../components/UI";
 import avatarImg from "../../assets/profile/avatar.png";
 import { LayoutContext } from "../../context/layout";
-import {
-  GameOfLifeGrid,
-  RoadTripGrid,
-  TetrominoesGrid,
-} from "../../components/grid";
+import { RoadTripGrid, TetrominoesGrid } from "../../components/grid";
 import { Header } from "../../components/header/header";
 import { GAME_MODE_OPTIONS } from "../../constants";
 import { PageContext } from "../../context";
@@ -22,11 +18,38 @@ export const IntroPage: React.FC = () => {
   const [dropFinished, setDropFinished] = useState(false);
   const [promptFinished, setPromptFinished] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
-  const { dims } = useContext(LayoutContext);
+  const { dims, gridSize } = useContext(LayoutContext);
   const [reloadTrigger, setReloadTrigger] = useState(0);
   const [selectedMode, setSelectedMode] = useState<GameMode>(
     GAME_MODE_OPTIONS[0]
   );
+
+  const gridByType: { [key in GameMode]: () => ReactElement } = {
+    "Road Trip": () => (
+      <RoadTripGrid
+        onAnimationStart={() => {
+          setDropFinished(false);
+          setIntroFinished(false);
+        }}
+        onAnimationFinish={() => {
+          setDropFinished(true);
+        }}
+        removeTiles={introFinished}
+      />
+    ),
+    Tetris: () => (
+      <TetrominoesGrid
+        onAnimationStart={() => {
+          setDropFinished(false);
+          setIntroFinished(false);
+        }}
+        onAnimationFinish={() => {
+          setDropFinished(true);
+        }}
+        removeTiles={introFinished}
+      />
+    ),
+  };
 
   useEffect(() => {
     if (reloadTrigger > 0) {
@@ -48,48 +71,14 @@ export const IntroPage: React.FC = () => {
           setReloadTrigger((prev) => prev + 1);
         }}
       />
-      {selectedMode === "Road Trip" && (
-        <RoadTripGrid
-          onAnimationStart={() => {
-            setDropFinished(false);
-            setIntroFinished(false);
-          }}
-          onAnimationFinish={() => {
-            setDropFinished(true);
-          }}
-          removeTiles={introFinished}
-        />
-      )}
-
-      {selectedMode === "Tetris" && (
-        <TetrominoesGrid
-          onAnimationStart={() => {
-            setDropFinished(false);
-            setIntroFinished(false);
-          }}
-          onAnimationFinish={() => {
-            setDropFinished(true);
-          }}
-          removeTiles={introFinished}
-        />
-      )}
-
-      {selectedMode === "Game of Life" && (
-        <GameOfLifeGrid
-          onAnimationStart={() => {
-            setDropFinished(false);
-            setIntroFinished(false);
-          }}
-          onAnimationFinish={() => {
-            setDropFinished(true);
-          }}
-          removeTiles={introFinished}
-        />
-      )}
-
+      {gridByType[selectedMode]()}
       {dropFinished && !introFinished && (
         <div
-          className={`w-full h-screen z-[2] flex flex-col justify-center items-center absolute top-0 left-0 m-0 mx-auto intro-overlay${
+          style={{
+            width: `${gridSize?.width}px`,
+            height: `${gridSize?.height}px`,
+          }}
+          className={`z-[2] flex flex-col justify-center items-center absolute top-0 left-0 m-0 mx-auto intro-overlay${
             introFinished ? " intro-animate-out" : ""
           }`}
         >

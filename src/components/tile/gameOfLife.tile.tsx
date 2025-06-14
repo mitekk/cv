@@ -1,6 +1,6 @@
-import { type CSSProperties, type HTMLAttributes } from "react";
+import { useContext, type CSSProperties, type HTMLAttributes } from "react";
 import type { ShapeKeyGameOfLife } from "../../types";
-import { TILE_SIZE } from "../../constants";
+import { LayoutContext } from "../../context";
 import "./gameOfLife.tile.css";
 
 interface GameOfLifeTileProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,15 +9,17 @@ interface GameOfLifeTileProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const GameOfLifeTile = ({ style, shape }: GameOfLifeTileProps) => {
+  const { tileSize } = useContext(LayoutContext);
+
   const tileStyle: CSSProperties = {
-    width: TILE_SIZE,
-    height: TILE_SIZE,
+    width: tileSize,
+    height: tileSize,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     boxSizing: "border-box",
     border: "1px solid #a2c17c",
-    backgroundColor: "#b6d9bb",
+    backgroundColor: "#d7e9d9",
     transition: "background 0.2s",
     position: "relative",
     borderRadius: 3,

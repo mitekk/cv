@@ -1,11 +1,15 @@
 import type { GameMode, Point, ShapeKeyTetrominoes } from "./types";
 
-export const TILE_SIZE = 50;
 export const TILE_GAP = 3;
+export const MIN_TILE = 50;
+export const MAX_TILE = 70;
+export const MIN_WIDTH = 1200;
+export const MAX_WIDTH = 1800;
+
 export const GAME_MODE_OPTIONS: GameMode[] = [
   "Tetris",
   "Road Trip",
-  "Game of Life",
+  // "Game of Life",
 ];
 
 export const COLORS: Record<ShapeKeyTetrominoes, string> = {

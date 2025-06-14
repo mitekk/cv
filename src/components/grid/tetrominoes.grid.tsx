@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContext } from "../../context/layout";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
+import { TILE_GAP } from "../../constants";
 import { TiledShape } from "../shape/shape";
 import type { Shape, ShapeKeyTetrominoes } from "../../types";
 import { generateTiledGrid } from "../../services/grid";
@@ -18,7 +18,7 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
   removeTiles = false,
 }) => {
   const [animated, setAnimated] = useState(false);
-  const { dims, gridSize } = useContext(LayoutContext);
+  const { dims, gridSize, tileSize } = useContext(LayoutContext);
 
   const shapes = useMemo<Shape<ShapeKeyTetrominoes>[]>(() => {
     if (dims.cols === 0 || dims.rows === 0) return [];
@@ -52,27 +52,37 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
     }, 150);
   };
 
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [mouseGrid, setMouseGrid] = useState<{ x: number; y: number } | null>(
+    null
+  );
 
   useEffect(() => {
-    const move = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    const move = (e: MouseEvent) => {
+      if (!gridRef.current) return;
+      const rect = gridRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      setMouseGrid({ x, y });
+    };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
   return shapes.length ? (
     <div
+      ref={gridRef}
       className="relative overflow-hidden"
       style={{
-        width: gridSize.width,
-        height: gridSize.height,
+        width: gridSize?.width,
+        height: gridSize?.height,
       }}
     >
       {shapes
         .sort((a, b) => a.points[0].x - b.points[0].x)
         .map((shape, idx) => {
-          const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
-          const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
+          const finalTop = shape.points[0].x * (tileSize + TILE_GAP);
+          const finalLeft = shape.points[0].y * (tileSize + TILE_GAP);
 
           let top;
           if (!removeTiles) {
@@ -81,10 +91,13 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
             top = animated ? finalTop + window.innerHeight * 2 : finalTop;
           }
 
-          const centerX = finalLeft + TILE_SIZE;
-          const centerY = finalTop + TILE_SIZE;
-          const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
-          const isHovered = dist < TILE_SIZE * 4;
+          const centerX = finalLeft + tileSize;
+          const centerY = finalTop + tileSize;
+          let dist = Infinity;
+          if (mouseGrid) {
+            dist = Math.hypot(mouseGrid.x - centerX, mouseGrid.y - centerY);
+          }
+          const isHovered = dist < tileSize * 4;
           const hoverScale = 1.2;
 
           return (
@@ -108,8 +121,8 @@ export const TetrominoesGrid: React.FC<TetrominoesGridProps> = ({
                   key={`${x}-${y}-${shape.key}`}
                   shape={shape.key}
                   style={{
-                    left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
-                    top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                    left: (y - shape.points[0].y) * (tileSize + TILE_GAP),
+                    top: (x - shape.points[0].x) * (tileSize + TILE_GAP),
                   }}
                 />
               ))}

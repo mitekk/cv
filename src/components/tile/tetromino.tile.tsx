@@ -1,15 +1,18 @@
-import { type CSSProperties, type HTMLAttributes } from "react";
-import { COLORS, TILE_SIZE } from "../../constants";
+import { useContext, type CSSProperties, type HTMLAttributes } from "react";
+import { LayoutContext } from "../../context";
 import type { ShapeKeyTetrominoes } from "../../types";
+import { COLORS } from "../../constants";
 
 interface TetrominoTileProps extends HTMLAttributes<HTMLDivElement> {
   shape: ShapeKeyTetrominoes;
 }
 
 export const TetrominoTile = ({ style, shape }: TetrominoTileProps) => {
+  const { tileSize } = useContext(LayoutContext);
+
   const tileStyle: CSSProperties = {
-    width: TILE_SIZE,
-    height: TILE_SIZE,
+    width: tileSize,
+    height: tileSize,
     background: `
       linear-gradient(to right, rgba(255,255,255,0.18), rgba(255,255,255,0)) no-repeat top / 100% 10px,
       linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0)) no-repeat left / 10px 100%,

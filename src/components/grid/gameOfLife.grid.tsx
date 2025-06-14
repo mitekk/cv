@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutContext } from "../../context/layout";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
+import { TILE_GAP } from "../../constants";
 import { TiledShape } from "../shape/shape";
 import type { Grid, Shape, ShapeKeyGameOfLife } from "../../types";
 import { generateGameOfLifeGrid } from "../../services/grid";
@@ -20,7 +20,7 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
   removeTiles,
   onAnimationFinish = () => {},
 }) => {
-  const { dims, gridSize } = useContext(LayoutContext);
+  const { dims, gridSize, tileSize } = useContext(LayoutContext);
   const [grid, setGrid] = useState<Grid<ShapeKeyGameOfLife>>(() =>
     generateGameOfLifeGrid({ rows: dims.rows, cols: dims.cols })
   );
@@ -79,20 +79,20 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
   return shapes.length ? (
     <div
       ref={containerRef}
-      className="relative overflow-hidden filter brightness-90 saturate-125"
+      className="relative overflow-hidden filter saturate-150"
       style={{
-        width: gridSize.width,
-        height: gridSize.height,
+        width: gridSize?.width,
+        height: gridSize?.height,
       }}
     >
       {shapes.map((shape, idx) => {
-        const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
-        const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
+        const finalTop = shape.points[0].x * (tileSize + TILE_GAP);
+        const finalLeft = shape.points[0].y * (tileSize + TILE_GAP);
 
-        const centerX = finalLeft + TILE_SIZE / 2;
-        const centerY = finalTop + TILE_SIZE / 2;
+        const centerX = finalLeft + tileSize / 2;
+        const centerY = finalTop + tileSize / 2;
         const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
-        const isHovered = dist < TILE_SIZE / 2;
+        const isHovered = dist < tileSize / 2;
 
         if (isHovered && shape.key !== "alive") {
           shape.key = "alive";
@@ -124,8 +124,8 @@ export const GameOfLifeGrid: React.FC<GameOfLifeGridProps> = ({
                 key={`${x}-${y}-${shape.key}`}
                 shape={shape.key}
                 style={{
-                  left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
-                  top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                  left: (y - shape.points[0].y) * (tileSize + TILE_GAP),
+                  top: (x - shape.points[0].x) * (tileSize + TILE_GAP),
                   backgroundColor: isHovered ? "#ff6a896b" : "#b6d9bb",
                 }}
               />

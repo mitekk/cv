@@ -4,8 +4,8 @@ import { generatePath, generateShapes, getPathData } from "../../services/grid";
 import { TiledShape } from "../shape/shape";
 import { RoadTripTile } from "../tile";
 import { RoadPath } from "../roadPath";
-import { TILE_GAP, TILE_SIZE } from "../../constants";
 import type { Point, Shape, ShapeKeyPath } from "../../types";
+import { TILE_GAP } from "../../constants";
 import "./roadTrip.grid.css";
 
 interface RoadTripProps {
@@ -19,7 +19,7 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
   removeTiles = false,
 }) => {
   const animationEndTimeout = useRef<number | null>(null);
-  const { dims, gridSize } = useContext(LayoutContext);
+  const { dims, gridSize, tileSize } = useContext(LayoutContext);
   const [animated, setAnimated] = useState(false);
   const [gridAnimationFinished, setGridAnimationFinished] = useState(false);
 
@@ -43,8 +43,8 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
   }, [dims.rows, dims.cols, pathPoints]);
 
   const pathData = useMemo<string>(() => {
-    return getPathData(pathPoints);
-  }, [pathPoints]);
+    return getPathData(pathPoints, tileSize);
+  }, [pathPoints, tileSize]);
 
   useEffect(() => {
     setAnimated(false);
@@ -72,39 +72,51 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
     }, 150);
   };
 
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [mouseGrid, setMouseGrid] = useState<{ x: number; y: number } | null>(
+    null
+  );
 
   useEffect(() => {
-    const move = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+    const move = (e: MouseEvent) => {
+      if (!gridRef.current) return;
+      const rect = gridRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      setMouseGrid({ x, y });
+    };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
   return shapes.length ? (
-    <div className="relative filter sepia brightness-150">
+    <div ref={gridRef} className="relative filter sepia brightness-150">
       <div
         style={{
           position: "relative",
-          width: gridSize.width,
-          height: gridSize.height,
+          width: gridSize?.width,
+          height: gridSize?.height,
           overflow: "hidden",
         }}
       >
         {shapes.map((shape, idx) => {
-          const finalTop = shape.points[0].x * (TILE_SIZE + TILE_GAP);
-          const finalLeft = shape.points[0].y * (TILE_SIZE + TILE_GAP);
+          const finalTop = shape.points[0].x * (tileSize + TILE_GAP);
+          const finalLeft = shape.points[0].y * (tileSize + TILE_GAP);
 
           let top;
           if (!removeTiles) {
-            top = animated ? finalTop : -TILE_SIZE;
+            top = animated ? finalTop : -tileSize;
           } else {
-            top = animated ? finalTop + dims.cols * TILE_SIZE : finalTop;
+            top = animated ? finalTop + dims.cols * tileSize : finalTop;
           }
 
-          const centerX = finalLeft + TILE_SIZE;
-          const centerY = finalTop + TILE_SIZE;
-          const dist = Math.hypot(mouse.x - centerX, mouse.y - centerY);
-          const isHovered = dist < TILE_SIZE * 4;
+          const centerX = finalLeft + tileSize / 2;
+          const centerY = finalTop + tileSize / 2;
+          let dist = Infinity;
+          if (mouseGrid) {
+            dist = Math.hypot(mouseGrid.x - centerX, mouseGrid.y - centerY);
+          }
+          const isHovered = dist < tileSize * 4;
           const hoverScale = 0.95;
 
           return (
@@ -126,8 +138,8 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
                   key={`${x}-${y}-${shape.key}`}
                   shape={shape.key}
                   style={{
-                    left: (y - shape.points[0].y) * (TILE_SIZE + TILE_GAP),
-                    top: (x - shape.points[0].x) * (TILE_SIZE + TILE_GAP),
+                    left: (y - shape.points[0].y) * (tileSize + TILE_GAP),
+                    top: (x - shape.points[0].x) * (tileSize + TILE_GAP),
                   }}
                 />
               ))}
@@ -136,8 +148,8 @@ export const RoadTripGrid: React.FC<RoadTripProps> = ({
         })}
       </div>
       <svg
-        width={gridSize.width}
-        height={gridSize.height}
+        width={gridSize?.width}
+        height={gridSize?.height}
         className="absolute top-0 left-0 z-[2] pointer-events-none"
       >
         {!removeTiles && (
