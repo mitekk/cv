@@ -1,17 +1,16 @@
 import { useContext, useEffect, useState, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { Prompter } from "../../components/prompter/prompter";
 import { PromptLines } from "../../assets/prompts";
 import { Avatar, Button } from "../../components/UI";
-import avatarImg from "../../assets/profile/avatar.png";
 import { LayoutContext } from "../../context/layout";
 import { RoadTripGrid, TetrominoesGrid } from "../../components/grid";
 import { Header } from "../../components/header/header";
-import { GAME_MODE_OPTIONS } from "../../constants";
 import { PageContext } from "../../context";
+import { GAME_MODE_OPTIONS } from "../../constants";
 import type { GameMode } from "../../types";
 import "./introPage.css";
+import avatarImg from "../../assets/profile/avatar.png";
 
 export const IntroPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,31 +23,20 @@ export const IntroPage: React.FC = () => {
     GAME_MODE_OPTIONS[0]
   );
 
+  const defaultGridProps = {
+    onAnimationStart: () => {
+      setDropFinished(false);
+      setIntroFinished(false);
+    },
+    onAnimationFinish: () => {
+      setDropFinished(true);
+    },
+    removeTiles: introFinished,
+  };
+
   const gridByType: { [key in GameMode]: () => ReactElement } = {
-    "Road Trip": () => (
-      <RoadTripGrid
-        onAnimationStart={() => {
-          setDropFinished(false);
-          setIntroFinished(false);
-        }}
-        onAnimationFinish={() => {
-          setDropFinished(true);
-        }}
-        removeTiles={introFinished}
-      />
-    ),
-    Tetris: () => (
-      <TetrominoesGrid
-        onAnimationStart={() => {
-          setDropFinished(false);
-          setIntroFinished(false);
-        }}
-        onAnimationFinish={() => {
-          setDropFinished(true);
-        }}
-        removeTiles={introFinished}
-      />
-    ),
+    "Road Trip": () => <RoadTripGrid {...defaultGridProps} />,
+    Tetris: () => <TetrominoesGrid {...defaultGridProps} />,
   };
 
   useEffect(() => {

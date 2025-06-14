@@ -83,7 +83,7 @@ export const Navbar: React.FC = () => {
           />
           <div className="flex flex-col">
             <span className="text-3xl">Mitya Kurs</span>
-            <span>Fullstack developer</span>
+            <span>Fullstack Team Lead</span>
           </div>
         </div>
         <div className="flex-4 py-2">

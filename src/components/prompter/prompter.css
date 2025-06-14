@@ -13,7 +13,8 @@
 }
 
 .prompt-cursor {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   line-height: 1em;
   animation: blink 1s steps(1) infinite;
   color: #b7410e;
