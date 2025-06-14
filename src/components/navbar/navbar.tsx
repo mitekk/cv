@@ -49,7 +49,7 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setActiveLink(pathname.split("/")[2]);
+    setActiveLink(pathname.split("/")[3]);
   }, [pathname]);
 
   useEffect(() => {
