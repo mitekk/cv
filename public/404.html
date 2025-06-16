@@ -1,9 +1,10 @@
 <script>
   if (location.pathname.startsWith("/portfolio/")) {
-    sessionStorage.redirect =
-      location.pathname.replace("/portfolio", "") +
+    var redirectPath =
+      location.pathname.replace(/^\/portfolio/, "") +
       location.search +
       location.hash;
+    sessionStorage.redirect = redirectPath;
     location.replace("/portfolio/");
   }
 </script>
