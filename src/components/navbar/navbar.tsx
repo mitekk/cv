@@ -73,7 +73,7 @@ export const Navbar: React.FC = () => {
   return (
     <nav className="flex justify-center items-center w-80 h-full p-8">
       <div
-        className="flex flex-col justify-between w-full h-full bg-zinc-700 rounded-xl p-8"
+        className="flex flex-col justify-between w-full h-full bg-zinc-700  text-[#fafafa] rounded-xl p-8"
         style={{ userSelect: "none" }}
       >
         <div className="flex-5 py-2">
