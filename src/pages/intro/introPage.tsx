@@ -93,7 +93,7 @@ export const IntroPage: React.FC = () => {
               {promptFinished && (
                 <div className="intro-action self-start mt-5 min-h-24 button-animate-in">
                   <Button
-                    title="Get to know me"
+                    style={{ minHeight: "4rem", fontSize: "2rem" }}
                     onClick={() => {
                       setIntroFinished(true);
                       setTimeout(
@@ -105,7 +105,9 @@ export const IntroPage: React.FC = () => {
                           : 750
                       );
                     }}
-                  />
+                  >
+                    Get to know me
+                  </Button>
                 </div>
               )}
             </div>
