@@ -5,7 +5,6 @@ import { TiledShape } from "../shape/shape";
 import type { Shape, ShapeKeyTetrominoes } from "../../types";
 import { generateTiledGrid } from "../../services/grid";
 import { TetrominoTile } from "../tile";
-import "./tetrominoes.grid.css";
 
 interface TetrominoesGridProps {
   onAnimationStart?: () => void;
